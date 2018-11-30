@@ -146,6 +146,7 @@
     <link rel="canonical" href="https://www.draw.io">
 	<link rel="manifest" href="images/manifest.json">
 	<link rel="shortcut icon" href="favicon.ico">
+	<script type="text/javascript" src="js/app.min.js"></script>
 	<style type="text/css">
 		body { overflow:hidden; }
 		div.picker { z-index: 10007; }
@@ -299,8 +300,6 @@
 		}
 
 		var t0 = new Date();
-
-		mxscript('js/app.min.js');
 
 		// Electron
 		if (window && window.process && window.process.type)
