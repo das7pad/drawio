@@ -182,11 +182,6 @@ App.TRELLO_URL = 'https://api.trello.com/1/client.js';
 App.TRELLO_JQUERY_URL = 'https://code.jquery.com/jquery-1.7.1.min.js';
 
 /**
- * Trello JQuery dependency
- */
-App.FOOTER_PLUGIN_URL = 'https://www.jgraph.com/drawio-footer.js';
-
-/**
  * Specifies the key for the pusher project.
  */
 App.PUSHER_KEY = '1e756b07a690c5bdb054';
@@ -505,11 +500,6 @@ App.main = function(callback, createUi)
 					}
 				}
 			}
-			else if (urlParams['chrome'] != '0' && !EditorUi.isElectronApp)
-			{
-				mxscript(App.FOOTER_PLUGIN_URL, null, null, null, mxClient.IS_SVG);
-			}
-			
 			if (plugins != null && plugins.length > 0 && urlParams['plugins'] != '0')
 			{
 				// Loading plugins inside the asynchronous block below stops the page from loading so a 
