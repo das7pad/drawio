@@ -152,6 +152,11 @@ App.MODE_BROWSER = 'browser';
 App.MODE_TRELLO = 'trello';
 
 /**
+ * MathJax src
+ */
+App.MATHJAX_URL = 'js/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+
+/**
  * Sets the delay for autosave in milliseconds. Default is 2000.
  */
 App.DROPBOX_APPKEY = 'libwls2fa9szdji';
