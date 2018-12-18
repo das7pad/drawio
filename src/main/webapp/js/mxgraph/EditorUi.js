@@ -489,7 +489,9 @@ EditorUi = function(editor, container, lightbox)
 		'endFill', 'endSize', 'jettySize', 'orthogonalLoop'];
 	
 	// Keys that are ignored together (if one appears all are ignored)
-	var keyGroups = [['startArrow', 'startFill', 'startSize', 'endArrow', 'endFill', 'endSize', 'jettySize', 'orthogonalLoop'],
+	var keyGroups = [['startArrow', 'startFill', 'startSize', 'sourcePerimeterSpacing',
+					'endArrow', 'endFill', 'endSize', 'targetPerimeterSpacing',
+					'jettySize', 'orthogonalLoop'],
 	                 ['strokeColor', 'strokeWidth'],
 	                 ['fillColor', 'gradientColor'],
 	                 valueStyles,
@@ -2619,7 +2621,7 @@ ChangePageSetup.prototype.execute = function()
 
     if (this.foldingEnabled != null && this.foldingEnabled != this.ui.editor.graph.foldingEnabled)
     {
-    		this.ui.setFoldingEnabled(this.foldingEnabled);
+    	this.ui.setFoldingEnabled(this.foldingEnabled);
         this.foldingEnabled = !this.foldingEnabled;
     }
 };
@@ -2887,7 +2889,6 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	}
 	
 	var effHsplitPosition = Math.max(0, Math.min(this.hsplitPosition, w - this.splitSize - 20));
-
 	var tmp = 0;
 	
 	if (this.menubar != null)
@@ -2932,6 +2933,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	this.hsplit.style.top = this.sidebarContainer.style.top;
 	this.hsplit.style.bottom = (this.footerHeight + off) + 'px';
 	this.hsplit.style.left = effHsplitPosition + 'px';
+	this.footerContainer.style.display = (this.footerHeight == 0) ? 'none' : '';
 	
 	if (this.tabContainer != null)
 	{

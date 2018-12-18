@@ -7,6 +7,7 @@
 // is used for development mode where the JS is in separate
 // files and the mxClient.js loads other files.
 // Adds external dependencies
+mxscript(drawDevUrl + 'js/cryptojs/aes.min.js');
 mxscript(drawDevUrl + 'js/spin/spin.min.js');
 mxscript(drawDevUrl + 'js/deflate/pako.min.js');
 mxscript(drawDevUrl + 'js/deflate/base64.js');
@@ -81,16 +82,14 @@ mxscript(drawDevUrl + 'js/diagramly/StorageLibrary.js');
 mxscript(drawDevUrl + 'js/diagramly/Dialogs.js');
 mxscript(drawDevUrl + 'js/diagramly/Editor.js');
 mxscript(drawDevUrl + 'js/diagramly/EditorUi.js');
-mxscript(drawDevUrl + 'js/diagramly/Settings.js');
-mxscript(drawDevUrl + 'js/diagramly/FileSync.js');
 mxscript(drawDevUrl + 'js/diagramly/DiffSync.js');
+mxscript(drawDevUrl + 'js/diagramly/Settings.js');
+mxscript(drawDevUrl + 'js/diagramly/DrawioFileSync.js');
 
 // Excluded in base.min.js
 mxscript(drawDevUrl + 'js/diagramly/DrawioClient.js');
 mxscript(drawDevUrl + 'js/diagramly/DrawioUser.js');
 mxscript(drawDevUrl + 'js/diagramly/UrlLibrary.js');
-mxscript(drawDevUrl + 'js/diagramly/DriveRealtime.js');
-mxscript(drawDevUrl + 'js/diagramly/RealtimeMapping.js');
 mxscript(drawDevUrl + 'js/diagramly/DriveFile.js');
 mxscript(drawDevUrl + 'js/diagramly/DriveLibrary.js');
 mxscript(drawDevUrl + 'js/diagramly/DriveClient.js');
@@ -106,7 +105,6 @@ mxscript(drawDevUrl + 'js/diagramly/OneDriveClient.js');
 mxscript(drawDevUrl + 'js/diagramly/TrelloFile.js');
 mxscript(drawDevUrl + 'js/diagramly/TrelloLibrary.js');
 mxscript(drawDevUrl + 'js/diagramly/TrelloClient.js');
-mxscript(drawDevUrl + 'js/diagramly/ChatWindow.js');
 
 mxscript(drawDevUrl + 'js/diagramly/App.js');
 mxscript(drawDevUrl + 'js/diagramly/Menus.js');
