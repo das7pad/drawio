@@ -805,7 +805,7 @@
 	 */
 	Editor.initMath = function(src, config)
 	{
-		src = (src != null) ? src : 'https://math.draw.io/current/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+		src = (src != null) ? src : App.MATHJAX_URL;
 		Editor.mathJaxQueue = [];
 		
 		Editor.doMathJaxRender = function(container)
