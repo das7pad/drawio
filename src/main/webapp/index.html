@@ -39,7 +39,9 @@
 		 */
 		var urlParams = (function()
 		{
-			var result = new Object();
+			var result = {
+				stealth: '1',
+			};
 			var params = window.location.search.slice(1).split('&');
 			
 			for (var i = 0; i < params.length; i++)
