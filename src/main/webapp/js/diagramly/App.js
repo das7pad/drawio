@@ -461,7 +461,7 @@ App.main = function(callback, createUi)
 		}
 		
 		// Loads Pusher API
-		if (!mxClient.IS_CHROMEAPP && !EditorUi.isElectronApp && DrawioFile.SYNC == 'auto')
+		if (!mxClient.IS_CHROMEAPP && !EditorUi.isElectronApp && DrawioFile.SYNC == 'auto' && urlParams['stealth'] !== '1')
 		{
 			// TODO: Check if async loading is fast enough
 			mxscript(App.PUSHER_URL);
