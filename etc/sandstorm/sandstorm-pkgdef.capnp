@@ -54,7 +54,7 @@ const pkgdef :Spk.PackageDefinition = (
         market = (png = (dpi1x = embed "client/images/drawlogo256.png")),
       ),
 
-      website = "https://www.draw.io/",
+      website = "https://draw.das7pad.de/",
       codeUrl = "https://github.com/jgraph/draw.io",
       license = (openSource = gpl3),
       categories = [office, productivity],

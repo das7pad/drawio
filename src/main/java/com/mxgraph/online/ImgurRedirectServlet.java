@@ -39,7 +39,7 @@ public class ImgurRedirectServlet extends HttpServlet
 		{
 			String id = uri.substring(last + 1);
 			response.setHeader("Location",
-					"https://www.draw.io/?chrome=0&lightbox=1&layers=1&url=http%3A%2F%2Fi.imgur.com%2F"
+					"https://draw.das7pad.de/?chrome=0&lightbox=1&layers=1&url=http%3A%2F%2Fi.imgur.com%2F"
 							+ id + ".png"
 							+ "&edit=https%3A%2F%2Fwww.draw.io%2F%3Furl%3Dhttp%253A%252F%252Fi.imgur.com%252F"
 							+ id + ".png");

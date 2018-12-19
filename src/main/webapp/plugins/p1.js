@@ -63,6 +63,6 @@ Draw.loadPlugin(function(ui) {
 //    var elt = ui.toolbar.addItem('', 'helloWorldAction');
 //
 //    // Cannot use built-in sprites
-//    elt.firstChild.style.backgroundImage = 'url(https://www.draw.io/images/logo-small.gif)';
+//    elt.firstChild.style.backgroundImage = 'url(https://draw.das7pad.de/images/logo-small.gif)';
 //    elt.firstChild.style.backgroundPosition = '2px 3px';
 });

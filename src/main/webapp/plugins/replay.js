@@ -142,7 +142,7 @@ Draw.loadPlugin(function(ui) {
 				{
 					if (newValue != null)
 					{
-						var dlg = new EmbedDialog(ui, 'https://www.draw.io/?p=replay&lightbox=1&replay-delay=' +
+						var dlg = new EmbedDialog(ui, 'https://draw.das7pad.de/?p=replay&lightbox=1&replay-delay=' +
 								parseFloat(newValue) + '&replay-data=' + graph.compress('<recording>' +
 								tmp.join('') + '</recording>'));
 						ui.showDialog(dlg.container, 440, 240, true, true);

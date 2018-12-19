@@ -1276,7 +1276,7 @@ var GoogleSitesDialog = function(editorUi, publicUrl)
 		if (embedCheckBox.checked && urlInput.value != '')
 		{
 			var encUrl = encodeURIComponent(mxUtils.htmlEntities(urlInput.value));
-			var gurl = 'https://www.draw.io/gadget.xml?type=4&diagram=' + encUrl;
+			var gurl = 'https://draw.das7pad.de/gadget.xml?type=4&diagram=' + encUrl;
 			
 			if (title != null)
 			{
@@ -1323,7 +1323,7 @@ var GoogleSitesDialog = function(editorUi, publicUrl)
 		}
 		else if (file.constructor == DriveFile || file.constructor == DropboxFile)
 		{
-			var gurl = 'https://www.draw.io/gadget.xml?embed=0&diagram=';
+			var gurl = 'https://draw.das7pad.de/gadget.xml?embed=0&diagram=';
 			
 			if (urlInput.value != '')
 			{
@@ -4611,7 +4611,7 @@ var LinkDialog = function(editorUi, initialValue, btnLabel, fn, showPages)
     		if (data.docs[0].mimeType == 'application/mxe' || (data.docs[0].mimeType != null &&
     			data.docs[0].mimeType.substring(0, 23) == 'application/vnd.jgraph.'))
     		{
-				href = 'https://www.draw.io/#G' + data.docs[0].id;
+				href = 'https://draw.das7pad.de/#G' + data.docs[0].id;
     		}
     		else if (data.docs[0].mimeType == 'application/vnd.google-apps.folder')
     		{

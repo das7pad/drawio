@@ -39,9 +39,9 @@
 	<target name="app" depends="merge">
 		<delete file="${basedir}/.tmp0.js"/>
 		<echo file="${basedir}/.tmp0.js">
-			window.STENCIL_PATH = window.STENCIL_PATH || 'https://www.draw.io/stencils';
-			window.SHAPES_PATH = window.SHAPES_PATH || 'https://www.draw.io/shapes';
-			window.mxBasePath = window.mxBasePath || 'https://www.draw.io/mxgraph/';
+			window.STENCIL_PATH = window.STENCIL_PATH || 'https://draw.das7pad.de/stencils';
+			window.SHAPES_PATH = window.SHAPES_PATH || 'https://draw.das7pad.de/shapes';
+			window.mxBasePath = window.mxBasePath || 'https://draw.das7pad.de/mxgraph/';
 			window.mxLoadStylesheets = window.mxLoadStylesheets || false;
 		</echo>
 

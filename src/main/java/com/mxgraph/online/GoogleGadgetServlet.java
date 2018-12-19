@@ -150,8 +150,8 @@ public class GoogleGadgetServlet extends HttpServlet
 		OutputStream out = response.getOutputStream();
 		out.write(("<Module>\n"+
 				"<ModulePrefs title=\"" + title + "\" height=\"" + height + "\"\n"+
-				" screenshot=\"https://www.draw.io/images/gadget-screenshot.png\"\n"+
-				" thumbnail=\"https://www.draw.io/images/gadget-thumb.png\"/>\n"+
+				" screenshot=\"https://draw.das7pad.de/images/gadget-screenshot.png\"\n"+
+				" thumbnail=\"https://draw.das7pad.de/images/gadget-thumb.png\"/>\n"+
 				"<UserPref name=\"diagram\" display_name=\"Diagram ID or URL\" datatype=\"string\"\n"+
 				" default_value=\"" + diagram + "\" required=\"true\">\n"+
 				"</UserPref>\n"+
@@ -193,7 +193,7 @@ public class GoogleGadgetServlet extends HttpServlet
 				" iframe.setAttribute(\'frameborder\', \'0\');\n"+
 				" iframe.style.width = \'100%\';\n"+
 				" iframe.style.height = \'100%\';\n"+
-				" iframe.setAttribute(\'src\', \'https://www.draw.io/?chrome=0\' + file);\n"+
+				" iframe.setAttribute(\'src\', \'https://draw.das7pad.de/?chrome=0\' + file);\n"+
 				" document.body.appendChild(iframe);\n"+
 				" }\n"+
 				" else\n"+
@@ -229,7 +229,7 @@ public class GoogleGadgetServlet extends HttpServlet
 				" \n"+
 				" inner.innerHTML = encodeURIComponent(model);\n"+
 				" \n"+
-				" var src = \'https://www.draw.io/embed.js\';\n"+
+				" var src = \'https://draw.das7pad.de/embed.js\';\n"+
 				" \n"+
 				" if (s.length > 0)\n"+
 				" {\n"+

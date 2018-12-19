@@ -112,7 +112,7 @@
 					key = key.substring(1, key.length);
 				}
 				
-				key = 'https://www.draw.io/' + key;
+				key = 'https://draw.das7pad.de/' + key;
 			}
 			
 			return key;
@@ -732,7 +732,7 @@
 							{
 								if (url != null)
 								{
-									window.open('https://www.draw.io/#U' + encodeURIComponent(url));
+									window.open('https://draw.das7pad.de/#U' + encodeURIComponent(url));
 								}
 								else
 								{
@@ -748,7 +748,7 @@
 									};
 									
 									window.addEventListener('message', receive);
-									wnd = window.open('https://www.draw.io/?client=1');
+									wnd = window.open('https://draw.das7pad.de/?client=1');
 								}
 							}
 							else

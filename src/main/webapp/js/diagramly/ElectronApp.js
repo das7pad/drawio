@@ -1,4 +1,4 @@
-window.OPEN_URL = 'https://www.draw.io/open';
+window.OPEN_URL = 'https://draw.das7pad.de/open';
 window.TEMPLATE_PATH = 'templates';
 FeedbackDialog.feedbackUrl = 'https://log.draw.io/email';
 
@@ -83,7 +83,7 @@ FeedbackDialog.feedbackUrl = 'https://log.draw.io/email';
 
 		editorUi.actions.put('useOffline', new Action(mxResources.get('useOffline') + '...', function()
 		{
-			editorUi.openLink('https://www.draw.io/')
+			editorUi.openLink('https://draw.das7pad.de/')
 		}));
 		
 		// Replaces file menu to replace openFrom menu with open and rename downloadAs to export

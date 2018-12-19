@@ -10,7 +10,7 @@
  * Alternatively, to avoid logging of the URL parameter with the API key, a ticketsConfig object
  * can be added in Editor.configure (ie. via #C hash property), eg. 
  * 
- * https://www.draw.io/?p=tickets#C%7B"ticketsConfig"%3A %7B"deskApiKey"%3A"YOUR_API_KEY"%2C"deskDomain"%3A"YOUR_DOMAIN"%7D%7D
+ * https://draw.das7pad.de/?p=tickets#C%7B"ticketsConfig"%3A %7B"deskApiKey"%3A"YOUR_API_KEY"%2C"deskDomain"%3A"YOUR_DOMAIN"%7D%7D
  * 
  * Use an additional "open" variable in the config JSON to open a file after parsing the config, eg.
  * 

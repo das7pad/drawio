@@ -16,12 +16,12 @@ mxUtils.extend(GraphViewer, mxEventSource);
 /**
  * Redirects editing to absolue URLs.
  */
-GraphViewer.prototype.editBlankUrl = 'https://www.draw.io/';
+GraphViewer.prototype.editBlankUrl = 'https://draw.das7pad.de/';
 
 /**
  * Base URL for relative images.
  */
-GraphViewer.prototype.imageBaseUrl = 'https://www.draw.io/';
+GraphViewer.prototype.imageBaseUrl = 'https://draw.das7pad.de/';
 
 /**
  * Redirects editing to absolue URLs.

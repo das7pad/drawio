@@ -599,7 +599,7 @@
 		{
 			if (mxClient.IS_CHROMEAPP || EditorUi.isElectronApp)
 			{
-				editorUi.openLink('https://www.draw.io/shortcuts.svg');
+				editorUi.openLink('https://draw.das7pad.de/shortcuts.svg');
 			}
 			else if (mxClient.IS_SVG)
 			{
@@ -607,7 +607,7 @@
 			}
 			else
 			{
-				editorUi.openLink('https://www.draw.io/?lightbox=1#Uhttps%3A%2F%2Fwww.draw.io%2Fshortcuts.svg');
+				editorUi.openLink('https://draw.das7pad.de/?lightbox=1#Uhttps%3A%2F%2Fwww.draw.io%2Fshortcuts.svg');
 			}
 		});
 
@@ -2216,7 +2216,7 @@
 							else
 							{
 								window.openWindow(((mxClient.IS_CHROMEAPP) ?
-									'https://www.draw.io/' : 'https://' + location.host + '/') +
+									'https://draw.das7pad.de/' : 'https://' + location.host + '/') +
 									window.location.search + '#U' + encodeURIComponent(fileUrl));
 							}
 						}

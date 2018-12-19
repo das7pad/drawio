@@ -544,7 +544,7 @@
 					this.editorUi.convertImages(doc.documentElement, mxUtils.bind(this, function(body)
 					{
 						var html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" ' +
-							'href="https://www.draw.io/styles/grapheditor.css"></head>' +
+							'href="https://draw.das7pad.de/styles/grapheditor.css"></head>' +
 							mxUtils.getXml(body) + '</html>';
 		
 						clone.style.position = 'absolute';
