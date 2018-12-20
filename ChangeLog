@@ -1,3 +1,16 @@
+20-DEC-2018: 10.0.6
+
+- Performance fixes for collaborative editing
+- Fixes collaboration conflict errors
+
+19-DEC-2018: 10.0.5
+
+- Fixes for collaborative editing
+
+19-DEC-2018: 10.0.4
+
+- Fixes for night mode and responsive UI
+
 18-DEC-2018: 10.0.3
 
 - Disables sync in Chrome OS

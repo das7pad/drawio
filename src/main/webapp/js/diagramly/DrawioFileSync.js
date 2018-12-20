@@ -393,7 +393,7 @@ DrawioFileSync.prototype.updateStatus = function()
 			var label = mxResources.get('lastChange', [str]);
 			
 			this.ui.editor.setStatus('<div style="display:inline-block;">' + mxUtils.htmlEntities(label)  + '</div>' +
-				((msg != null) ? ' (' + msg + ')' : '') +
+				((msg != null) ? ' <span style="opacity:0;">(' + msg + ')</span>' : '') +
 				(this.file.isEditable() ? '' : '<div class="geStatusAlert" style="margin-left:8px;display:inline-block;">' +
 					mxUtils.htmlEntities(mxResources.get('readOnly')) + '</div>') +
 				(this.isConnected() ? '' : '<div class="geStatusAlert geBlink" style="margin-left:8px;display:inline-block;">' +
@@ -417,6 +417,26 @@ DrawioFileSync.prototype.updateStatus = function()
 				{
 					links[0].setAttribute('title', label);
 				}
+			}
+			
+			// Fades in/out last message
+			var spans = this.ui.statusContainer.getElementsByTagName('span');
+			
+			if (spans.length > 0)
+			{
+				var temp = spans[0];
+				mxUtils.setPrefixedStyle(temp.style, 'transition', 'all 0.2s ease');
+				
+				window.setTimeout(mxUtils.bind(this, function()
+				{
+					mxUtils.setOpacity(temp, 100);
+					mxUtils.setPrefixedStyle(temp.style, 'transition', 'all 1s ease');
+					
+					window.setTimeout(mxUtils.bind(this, function()
+					{
+						mxUtils.setOpacity(temp, 0);
+					}), this.updateStatusInterval / 2);
+				}), 0);
 			}
 			
 			this.resetUpdateStatusThread();
@@ -551,6 +571,7 @@ DrawioFileSync.prototype.handleMessageData = function(data)
 		{
 			this.lastMessage = mxResources.get((data.a == 'join') ?
 				'userJoined' : 'userLeft', [data.name]);
+			this.resetUpdateStatusThread();
 			this.updateStatus();
 		}
 	}
@@ -820,41 +841,56 @@ DrawioFileSync.prototype.merge = function(patches, checksum, etag, success, erro
 			
 		// Creates a patch for backup if the checksum fails
 		this.file.backupPatch = (this.file.isModified()) ?
-			this.ui.diffPages(this.file.shadowPages, this.ui.pages) : null;
-		
-		// Patches the current document
-		this.file.patch(patches, (DrawioFile.LAST_WRITE_WINS &&
-			this.file.isEditable() && this.file.isModified()) ?
-			this.file.shadowPages : null);
-		
-		// Patches the shadow document
-		for (var i = 0; i < patches.length; i++)
-		{
-			this.file.shadowPages = this.ui.patchPages(this.file.shadowPages, patches[i]);
-		}
-		
-		var current = (checksum != null) ? this.ui.getHashValueForPages(this.file.shadowPages) : null;
-		EditorUi.debug('Sync.merge', [this], 'from', this.file.getCurrentEtag(), 'to', etag,
-			'attempt', this.catchupRetryCount, 'diffs', patches, 'checksum',
-			checksum == current, checksum);
+			this.ui.diffPages(this.file.shadowPages,
+			this.ui.pages) : null;
 
-		// Compares the checksum
-		if (checksum != null && checksum != current)
+		if (!this.file.ignorePatches(patches))
 		{
-			this.file.stats.mergeChecksumErrors++;
-			this.file.checksumError(error, patches);
-		}
-		else
-		{
-			this.file.invalidChecksum = false;
-			this.file.inConflictState = false;
-			this.file.backupPatch = null;
-			this.file.setCurrentEtag(etag);
-			
-			if (success != null)
+			// Patches the shadow document
+			for (var i = 0; i < patches.length; i++)
 			{
-				success();
+				this.file.shadowPages = this.ui.patchPages(this.file.shadowPages, patches[i]);
 			}
+			
+			var current = (checksum != null) ? this.ui.getHashValueForPages(this.file.shadowPages) : null;
+			
+			if (urlParams['test'] == '1')
+			{
+				EditorUi.debug('Sync.merge', [this],
+					'from', this.file.getCurrentEtag(), 'to', etag,
+					'patches', patches, 'backup', this.file.backupPatch,
+					'attempt', this.catchupRetryCount,
+					'checksum', checksum == current, checksum);
+			}
+			
+			// Compares the checksum
+			if (checksum != null && checksum != current)
+			{
+				this.file.stats.mergeChecksumErrors++;
+				this.file.checksumError(error, patches,
+					'checksum: ' + checksum +
+					'\ncurrent: ' + current);
+				
+				// Abnormal termination
+				return;
+			}
+			else
+			{
+				// Patches the current document
+				this.file.patch(patches,
+					(DrawioFile.LAST_WRITE_WINS) ?
+					this.file.backupPatch : null);
+			}
+		}
+
+		this.file.invalidChecksum = false;
+		this.file.inConflictState = false;
+		this.file.setCurrentEtag(etag);
+		this.file.backupPatch = null;
+		
+		if (success != null)
+		{
+			success();
 		}
 	}
 	catch (e)
@@ -878,8 +914,7 @@ DrawioFileSync.prototype.merge = function(patches, checksum, etag, success, erro
 			var uid = (user != null) ? this.ui.hashValue(user.id) : 'unknown';
 	
 			EditorUi.sendReport('Error in merge ' + new Date().toISOString() + ':\n\n' +
-				'File=' + this.file.getId() + '\n' +
-				'Mode=' + this.file.getMode() + '\n' +
+				'File=' + this.file.getId() + ' (' + this.file.getMode() + ')\n' +
 				'Client=' + this.clientId + '\n' +
 				'User=' + uid + '\n' +
 				'Size=' + this.file.getSize() + '\n' +
@@ -979,32 +1014,42 @@ DrawioFileSync.prototype.fileSaved = function(pages, lastDesc, success, error)
 			'&msg=' + encodeURIComponent(msg) + ((secret != null) ? '&secret=' + encodeURIComponent(secret) : '') +
 			((data.length < this.maxCacheEntrySize) ? '&data=' + encodeURIComponent(data) : ''),
 			mxUtils.bind(this, function(req)
+		{
+			this.file.shadowPages = pages;
+			
+			if (req.getStatus() >= 200 && req.getStatus() <= 299)
 			{
-				if (req.getStatus() >= 200 && req.getStatus() <= 299)
+				if (success != null)
 				{
-					if (success != null)
-					{
-						success();
-					}
+					success();
 				}
-				else if (error != null)
-				{
-					error({message: req.getStatus()});
-				}
-			}));
-		EditorUi.debug('Sync.fileSaved', [this], 'from', etag, 'to', current,
-			data.length, 'bytes', 'diff', diff, 'checksum', checksum);
+			}
+			else if (error != null)
+			{
+				error({message: req.getStatus()});
+			}
+		}));
+
+		if (urlParams['test'] == '1')
+		{
+			EditorUi.debug('Sync.fileSaved', [this],
+				'from', etag, 'to', current, data.length,
+				'bytes', 'diff', diff, 'checksum', checksum);
+		}
+		
 		this.file.stats.bytesSent += data.length;
 		this.file.stats.msgSent++;
 	}
 	else
 	{
+		this.file.shadowPages = pages;
+		
 		if (this.channelId == null)
 		{
 			// Checks channel ID and starts sync
 			this.start();
 		}
-		
+
 		if (success != null)
 		{
 			success();
