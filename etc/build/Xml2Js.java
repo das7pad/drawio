@@ -42,23 +42,25 @@ public class Xml2Js
 
 		List<String> result = new LinkedList<String>();
 		String basePath = base.getCanonicalPath();
-		File[] list = root.listFiles();
 
-		if (list != null)
+		// traverse directories first
+		File[] dirs = root.listFiles((f, s) -> new File(f, s).isDirectory());
+		if (dirs != null)
 		{
-			for (File f : list)
+			for (File f : dirs)
 			{
-				if (f.isDirectory())
-				{
-					result.addAll(walk(base, f));
-				}
-				else if (f.getCanonicalPath().toLowerCase().endsWith(".xml"))
-				{
-					String name = f.getCanonicalPath()
-							.substring(basePath.length() + 1);
-					result.add(
-							"f['" + name + "'] = '" + processFile(f) + "';\n");
-				}
+				result.addAll(walk(base, f));
+			}
+		}
+
+		File[] files = root.listFiles((f, name) -> name.endsWith(".xml"));
+		if (files != null)
+		{
+			for (File f : files)
+			{
+				String name = f.getCanonicalPath()
+						.substring(basePath.length() + 1);
+				result.add("f['" + name + "'] = '" + processFile(f) + "';\n");
 			}
 		}
 
