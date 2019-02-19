@@ -14,6 +14,7 @@ app:
 .PHONY: merge
 merge: $(webapp)/cache.manifest
 merge: $(webapp)/js/shapes.min.js
+merge: $(webapp)/js/stencils.min.js
 merge:
 	ant merge
 
@@ -33,6 +34,9 @@ $(webapp)/js/shapes.min.js: $(shell find $(webapp)/shapes)
 		--rewrite_polyfills false \
 		--js_output_file $@ \
 		$(sort $(shell find $(webapp)/shapes/ -type f -name "*.js"))
+
+$(webapp)/js/stencils.min.js: $(shell find $(webapp)/stencils)
+	java Xml2Js $(webapp)/stencils/ $@
 
 .PHONY: javac
 javac:
