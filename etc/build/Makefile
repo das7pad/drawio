@@ -18,15 +18,9 @@ merge: $(webapp)/js/stencils.min.js
 merge:
 	ant merge
 
-$(webapp)/cache.manifest: cache.txt
+$(webapp)/cache.manifest: cache.manifest.in
 $(webapp)/cache.manifest:
-	echo "\
-	CACHE MANIFEST\n\
-	\n\
-	# THIS FILE WAS GENERATED. DO NOT MODIFY!\n\
-	# $(shell date +'%Y/%m/%d/ %I:%M %p')\n\
-	" > $@
-	cat $^ >> $@
+	sed "s#%%DATE%%#$(shell date +'%m/%d/%Y %I:%M %p')#" $< > $@
 
 $(webapp)/js/shapes.min.js: $(shell find $(webapp)/shapes)
 	java -jar compiler.jar \
