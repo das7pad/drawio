@@ -13,6 +13,7 @@ app:
 
 .PHONY: merge
 merge: $(webapp)/cache.manifest
+merge: $(build)/shapes.js
 merge:
 	ant merge
 
@@ -25,6 +26,10 @@ $(webapp)/cache.manifest:
 	# $(shell date +'%Y/%m/%d/ %I:%M %p')\n\
 	" > $@
 	cat $^ >> $@
+
+$(build)/shapes.js: $(build)
+$(build)/shapes.js: $(shell find $(webapp)/shapes)
+	cat $(sort $(shell find $(webapp)/shapes/ -type f -name "*.js")) > $@
 
 .PHONY: javac
 javac:
