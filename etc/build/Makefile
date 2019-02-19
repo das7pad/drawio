@@ -1,6 +1,7 @@
 build = ../../build
 src = ../../src
 webapp = $(src)/main/webapp
+styles = $(webapp)/styles
 
 jscompile = java \
 	-jar compiler.jar \
@@ -16,6 +17,8 @@ all:
 .PHONY: app
 app: merge
 app: $(build)/constants.min.js
+app: $(build)/default.min.xml
+app: $(build)/dark-default.min.xml
 app:
 	ant app
 
@@ -24,6 +27,9 @@ $(build)/constants.min.js: constants.js
 	$(jscompile) \
 		--js_output_file $@ \
 		$<
+
+$(build)/%.min.xml: $(styles)/%.xml
+	tr --delete '\n' < $< | sed "s/'/\\\\'/g;s/\t//g;" > $@
 
 .PHONY: merge
 merge: $(webapp)/cache.manifest

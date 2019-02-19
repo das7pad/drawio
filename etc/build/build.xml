@@ -10,28 +10,15 @@
 	</target>
 
 	<target name="app">
-		<delete file="${basedir}/default.min.xml"/>
-		<copy file="${war.dir}/styles/default.xml" tofile="${basedir}/default.min.xml" overwrite="true"/>
-		<replaceregexp file="${basedir}/default.min.xml" match="${line.separator}" flags="g" replace=""/>
-		<replaceregexp file="${basedir}/default.min.xml" match="\t" flags="g" replace=""/>
-		<replaceregexp file="${basedir}/default.min.xml" match="'" flags="g" replace="\\\\'" byline="true"/>
-		
 		<delete file="${basedir}/Graph-Stylesheet.js"/>
 		<echo file="${basedir}/Graph-Stylesheet.js">Graph.prototype.defaultThemes[Graph.prototype.defaultThemeName] = mxUtils.parseXml('</echo>
 		<concat destfile="${basedir}/Graph-Stylesheet.js" fixlastline="no" append="true">
-			<filelist dir="${basedir}" files="default.min.xml"/>
+			<filelist dir="${build.dir}" files="default.min.xml"/>
     		</concat>
 		<echo file="${basedir}/Graph-Stylesheet.js" append="true">').documentElement;</echo>
-
-		<delete file="${basedir}/dark-default.min.xml"/>
-		<copy file="${war.dir}/styles/dark-default.xml" tofile="${basedir}/dark-default.min.xml" overwrite="true"/>
-		<replaceregexp file="${basedir}/dark-default.min.xml" match="${line.separator}" flags="g" replace=""/>
-		<replaceregexp file="${basedir}/dark-default.min.xml" match="\t" flags="g" replace=""/>
-		<replaceregexp file="${basedir}/dark-default.min.xml" match="'" flags="g" replace="\\\\'" byline="true"/>
-
 		<echo file="${basedir}/Graph-Stylesheet.js" append="true">Graph.prototype.defaultThemes['darkTheme'] = mxUtils.parseXml('</echo>
 		<concat destfile="${basedir}/Graph-Stylesheet.js" fixlastline="no" append="true">
-			<filelist dir="${basedir}" files="dark-default.min.xml"/>
+			<filelist dir="${build.dir}" files="dark-default.min.xml"/>
     		</concat>
 		<echo file="${basedir}/Graph-Stylesheet.js" append="true">').documentElement;</echo>
 
@@ -201,8 +188,6 @@
 		<delete file="${basedir}/.tmp1.js"/>
 		<delete file="${basedir}/.tmp2.js"/>
 		<delete file="${basedir}/.tmp2.min.js"/>
-		<delete file="${basedir}/default.min.xml"/>
-		<delete file="${basedir}/dark-default.min.xml"/>
 		<delete file="${basedir}/.tmp2.xml"/>
 
 		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/.tmp1.js">
