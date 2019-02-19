@@ -563,19 +563,21 @@ FeedbackDialog.feedbackUrl = 'https://log.draw.io/email';
 	{
 		this.saveAs(this.ui.getCopyFilename(this), success, error);
 	};
-
-	// Copy stat from source file on success
-	LocalFile.prototype.mergeFile = function(file, success, error)
+	
+	/**
+	 * Adds all listeners.
+	 */
+	LocalFile.prototype.getDescriptor = function()
 	{
-		DrawioFile.prototype.mergeFile.call(this, file, mxUtils.bind(this, function()
-		{
-			this.stat = file.stat;
-			
-			if (success != null)
-			{
-				success();
-			}
-		}), error);
+		return this.stat;
+	};
+
+	/**
+	* Updates the descriptor of this file with the one from the given file.
+	*/
+	LocalFile.prototype.setDescriptor = function(stat)
+	{
+		this.stat = stat;
 	};
 	
 	LocalFile.prototype.reloadFile = function(success)
@@ -640,12 +642,12 @@ FeedbackDialog.feedbackUrl = 'https://log.draw.io/email';
 
 	LocalFile.prototype.isAutosave = function()
 	{
-		return this.ui.editor.autosave && this.fileObject != null;
+		return this.fileObject != null && DrawioFile.prototype.isAutosave.apply(this, arguments);
 	};
 	
 	LocalFile.prototype.isAutosaveOptional = function()
 	{
-		return true;
+		return this.fileObject != null;
 	};
 	
 	LocalLibrary.prototype.isAutosave = function()
@@ -691,6 +693,8 @@ FeedbackDialog.feedbackUrl = 'https://log.draw.io/email';
 			{
 				var doSave = mxUtils.bind(this, function(data, enc)
 				{
+					var savedData = this.data;
+					
 					// Makes sure no changes get lost while the file is saved
 					var prevModified = this.isModified;
 					var modified = this.isModified();
@@ -731,14 +735,18 @@ FeedbackDialog.feedbackUrl = 'https://log.draw.io/email';
 									{
 										this.savingFile = false;
 										this.isModified = prevModified;
+										var lastDesc = this.stat;
 										this.stat = stat2;
-										this.contentChanged();
-										this.fileSaved(data);
 										
-										if (success != null)
+										this.fileSaved(savedData, lastDesc, mxUtils.bind(this, function()
 										{
-											success();
-										}
+											this.contentChanged();
+											
+											if (success != null)
+											{
+												success();
+											}
+										}), error);
 									}
 								}));
 			        		}
@@ -820,7 +828,7 @@ FeedbackDialog.feedbackUrl = 'https://log.draw.io/email';
 		
 		// Adds default extension
 		if (filename.length > 0 && (!/(\.xml)$/i.test(filename) && !/(\.html)$/i.test(filename) &&
-			!/(\.svg)$/i.test(filename) && !/(\.png)$/i.test(filename)))
+			!/(\.svg)$/i.test(filename) && !/(\.png)$/i.test(filename) && !/(\.drawio)$/i.test(filename)))
 		{
 			filename += '.xml';
 		}
@@ -834,7 +842,7 @@ FeedbackDialog.feedbackUrl = 'https://log.draw.io/email';
 			this.fileObject.name = path.replace(/^.*[\\\/]/, '');
 			this.fileObject.type = 'utf-8';
 			
-			this.save(false, success, error);
+			this.save(false, success, error, null, true);
 		}
 	};
 	
@@ -963,7 +971,8 @@ FeedbackDialog.feedbackUrl = 'https://log.draw.io/email';
 		editorUiUpdateActionStates.apply(this, arguments);
 
 		var file = this.getCurrentFile();
-		this.actions.get('synchronize').setEnabled(file != null && file.fileObject != null);
+		var syncEnabled = file != null && file.fileObject != null;
+		this.actions.get('synchronize').setEnabled(syncEnabled);
 	};
 	
 	EditorUi.prototype.saveLocalFile = function(data, filename, mimeType, base64Encoded, format, allowBrowser)
@@ -1028,7 +1037,7 @@ FeedbackDialog.feedbackUrl = 'https://log.draw.io/email';
 					{
 						this.handleError({message: mxResources.get('errorSavingFile')});
 					}
-	        		}));
+	        	}));
 			}
 		}), 0);
 	};

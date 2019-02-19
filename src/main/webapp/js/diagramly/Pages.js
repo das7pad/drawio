@@ -190,12 +190,10 @@ SelectPage.prototype.execute = function()
 		page = this.ui.currentPage;
 	
 		// Switches the root cell and sets the view state
+		graph.model.prefix = Editor.guid() + '-';
 		graph.model.rootChanged(page.root);
 		graph.setViewState(page.viewState);
-				
-		// Fires event to setting view state from realtime
-		editor.fireEvent(new mxEventObject('setViewState', 'change', this));
-		
+
 		// Handles grid state in chromeless mode which is stored in Editor instance
 		graph.gridEnabled = graph.gridEnabled && (!this.ui.editor.isChromelessView() ||
 			urlParams['grid'] == '1');
@@ -520,9 +518,11 @@ Graph.prototype.saveViewState = function(vs, node, ignoreTransient)
 		node.setAttribute('arrows', (vs == null || vs.arrows) ? '1' : '0');
 		node.setAttribute('page', ((vs == null && this.defaultPageVisible ) ||
 			(vs != null && vs.pageVisible)) ? '1' : '0');
+		
+		// Ignores fold to avoid checksum errors for lightbox mode
+		node.setAttribute('fold', (vs == null || vs.foldingEnabled) ? '1' : '0');
 	}
 
-	node.setAttribute('fold', (vs == null || vs.foldingEnabled) ? '1' : '0');
 	node.setAttribute('pageScale', (vs != null && vs.pageScale != null) ? vs.pageScale : mxGraph.prototype.pageScale);
 	
 	var pf = (vs != null) ? vs.pageFormat : mxSettings.getPageFormat();
@@ -663,6 +663,7 @@ Graph.prototype.setViewState = function(state)
 	// Implicit settings
 	this.pageBreaksVisible = this.pageVisible; 
 	this.preferPageSize = this.pageVisible;
+	this.fireEvent(new mxEventObject('viewStateChanged', 'state', state));
 };
 
 /**
@@ -715,30 +716,37 @@ EditorUi.prototype.updatePageRoot = function(page)
  */
 EditorUi.prototype.selectPage = function(page, quiet, viewState)
 {
-	if (this.editor.graph.isEditing())
+	try
 	{
-		this.editor.graph.stopEditing(false);
+		if (this.editor.graph.isEditing())
+		{
+			this.editor.graph.stopEditing(false);
+		}
+		
+		quiet = (quiet != null) ? quiet : false;
+		this.editor.graph.isMouseDown = false;
+		this.editor.graph.reset();
+		
+		var edit = this.editor.graph.model.createUndoableEdit();
+		
+		// Special flag to bypass autosave for this edit
+		edit.ignoreEdit = true;
+	
+		var change = new SelectPage(this, page, viewState);
+		change.execute();
+		edit.add(change);
+		edit.notify();
+		
+		this.editor.graph.tooltipHandler.hide();
+		
+		if (!quiet)
+		{
+			this.editor.graph.model.fireEvent(new mxEventObject(mxEvent.UNDO, 'edit', edit));
+		}
 	}
-	
-	quiet = (quiet != null) ? quiet : false;
-	this.editor.graph.isMouseDown = false;
-	this.editor.graph.reset();
-	
-	var edit = this.editor.graph.model.createUndoableEdit();
-	
-	// Special flag to bypass autosave for this edit
-	edit.ignoreEdit = true;
-
-	var change = new SelectPage(this, page, viewState);
-	change.execute();
-	edit.add(change);
-	edit.notify();
-	
-	this.editor.graph.tooltipHandler.hide();
-	
-	if (!quiet)
+	catch (e)
 	{
-		this.editor.graph.model.fireEvent(new mxEventObject(mxEvent.UNDO, 'edit', edit));
+		this.handleError(e);
 	}
 };
 
@@ -834,51 +842,57 @@ EditorUi.prototype.createPageName = function()
  */
 EditorUi.prototype.removePage = function(page)
 {
-	var graph = this.editor.graph;
-	
-	if (graph.isEnabled())
+	try
 	{
-		if (this.editor.graph.isEditing())
-		{
-			this.editor.graph.stopEditing(false);
-		}
+		var graph = this.editor.graph;
+		var tmp = mxUtils.indexOf(this.pages, page);
 		
-		graph.model.beginUpdate();
-		try
+		if (graph.isEnabled() && tmp >= 0)
 		{
-			var next = this.currentPage;
-			
-			if (next == page && this.pages.length > 1)
+			if (this.editor.graph.isEditing())
 			{
-				var tmp = mxUtils.indexOf(this.pages, page);
-				
-				if (tmp == this.pages.length - 1)
-				{
-					tmp--;
-				}
-				else
-				{
-					tmp++;
-				}
-				
-				next = this.pages[tmp];
-			}
-			else if (this.pages.length <= 1)
-			{
-				// Removes label with incorrect page number to force
-				// default page name which is OK for a single page
-				next = this.insertPage();
-				graph.model.execute(new RenamePage(this, next,
-					mxResources.get('pageWithNumber', [1])));
+				this.editor.graph.stopEditing(false);
 			}
 			
-			// Uses model to fire event to trigger autosave
-			graph.model.execute(new ChangePage(this, page, next));
+			graph.model.beginUpdate();
+			try
+			{
+				var next = this.currentPage;
+				
+				if (next == page && this.pages.length > 1)
+				{
+					if (tmp == this.pages.length - 1)
+					{
+						tmp--;
+					}
+					else
+					{
+						tmp++;
+					}
+					
+					next = this.pages[tmp];
+				}
+				else if (this.pages.length <= 1)
+				{
+					// Removes label with incorrect page number to force
+					// default page name which is OK for a single page
+					next = this.insertPage();
+					graph.model.execute(new RenamePage(this, next,
+						mxResources.get('pageWithNumber', [1])));
+				}
+				
+				// Uses model to fire event to trigger autosave
+				graph.model.execute(new ChangePage(this, page, next));
+			}
+			finally
+			{
+				graph.model.endUpdate();
+			}
 		}
-		finally
-		{
-			graph.model.endUpdate();
-		}
+	}
+	catch (e)
+	{
+		this.handleError(e);
 	}
 	
 	return page;
@@ -889,33 +903,41 @@ EditorUi.prototype.removePage = function(page)
  */
 EditorUi.prototype.duplicatePage = function(page, name)
 {
-	var graph = this.editor.graph;
 	var newPage = null;
 	
-	if (graph.isEnabled())
+	try
 	{
-		if (graph.isEditing())
+		var graph = this.editor.graph;
+		
+		if (graph.isEnabled())
 		{
-			graph.stopEditing();
+			if (graph.isEditing())
+			{
+				graph.stopEditing();
+			}
+			
+			// Clones the current page and takes a snapshot of the graph model and view state
+			var node = page.node.cloneNode(false);
+			node.removeAttribute('id');
+			
+			var newPage = new DiagramPage(node);
+			newPage.root = graph.cloneCell(graph.model.root);
+			newPage.viewState = graph.getViewState();
+			
+			// Resets zoom and scrollbar positions
+			newPage.viewState.scale = 1;
+			newPage.viewState.scrollLeft = null;
+			newPage.viewState.scrollTop = null;
+			newPage.viewState.currentRoot = null;
+			newPage.viewState.defaultParent = null;
+			newPage.setName(name);
+			
+			newPage = this.insertPage(newPage, mxUtils.indexOf(this.pages, page) + 1);
 		}
-		
-		// Clones the current page and takes a snapshot of the graph model and view state
-		var node = page.node.cloneNode(false);
-		node.removeAttribute('id');
-		
-		var newPage = new DiagramPage(node);
-		newPage.root = graph.cloneCell(graph.model.root);
-		newPage.viewState = graph.getViewState();
-		
-		// Resets zoom and scrollbar positions
-		newPage.viewState.scale = 1;
-		newPage.viewState.scrollLeft = null;
-		newPage.viewState.scrollTop = null;
-		newPage.viewState.currentRoot = null;
-		newPage.viewState.defaultParent = null;
-		newPage.setName(name);
-		
-		newPage = this.insertPage(newPage, mxUtils.indexOf(this.pages, page) + 1);
+	}
+	catch (e)
+	{
+		this.handleError(e);
 	}
 	
 	return newPage;
@@ -1319,7 +1341,7 @@ EditorUi.prototype.createPageInsertTab = function()
 EditorUi.prototype.createTabForPage = function(page, tabWidth, hoverEnabled)
 {
 	var tab = this.createTab(hoverEnabled);
-	var name = page.getName();
+	var name = page.getName() || mxResources.get('untitled');
 	var id = page.getId();
 	tab.setAttribute('title', name + ((id != null) ? ' (' + id + ')' : ''));
 	mxUtils.write(tab, name);

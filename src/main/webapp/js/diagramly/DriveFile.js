@@ -157,7 +157,6 @@ DriveFile.prototype.saveFile = function(title, revision, success, error, unloadi
 	{
 		var doSave = mxUtils.bind(this, function(realOverwrite, realRevision)
 		{
-			var savedData = this.data;
 			var lastDesc = this.desc;
 			
 			// Makes sure no changes get lost while the file is saved
@@ -173,7 +172,7 @@ DriveFile.prototype.saveFile = function(title, revision, success, error, unloadi
 				return true;
 			};
 
-			this.ui.drive.saveFile(this, realRevision, mxUtils.bind(this, function(resp)
+			this.ui.drive.saveFile(this, realRevision, mxUtils.bind(this, function(resp, savedData)
 			{
 				this.isModified = prevModified;
 				this.savingFile = false;
@@ -191,11 +190,12 @@ DriveFile.prototype.saveFile = function(title, revision, success, error, unloadi
 					this.autosaveDelay = Math.min(6000,
 						Math.max(this.saveDelay + 500,
 						DrawioFile.prototype.autosaveDelay));
-
 					this.desc = resp;
-					this.contentChanged();
+					
 					this.fileSaved(savedData, lastDesc, mxUtils.bind(this, function()
 					{
+						this.contentChanged();
+						
 						if (success != null)
 						{
 							success(resp);
@@ -257,6 +257,34 @@ DriveFile.prototype.saveFile = function(title, revision, success, error, unloadi
 		
 		doSave(overwrite, revision);
 	}
+};
+
+/**
+ * Shows a conflict dialog to the user.
+ */
+DriveFile.prototype.copyFile = function(success, error)
+{
+	if (!this.isRestricted())
+	{
+		this.makeCopy(mxUtils.bind(this, function()
+		{
+			if (this.ui.spinner.spin(document.body, mxResources.get('saving')))
+			{
+				try
+				{
+					this.save(true, success, error)
+				}
+				catch (e)
+				{
+					error(e);
+				}
+			}
+		}), error, true);
+	}
+	else
+	{
+		DrawioFile.prototype.copyFile.apply(this, arguments);
+	}	
 };
 
 /**
@@ -438,19 +466,16 @@ DriveFile.prototype.getRevisions = function(success, error)
 		{
 			(mxUtils.bind(this, function(item)
 			{
+				// Redirects title to originalFilename to
+				// match expected descriptor interface
+				item.title = item.originalFilename;
+				
 				item.getXml = mxUtils.bind(this, function(itemSuccess, itemError)
 				{
-					this.ui.drive.executeRequest(gapi.client.drive.revisions.get(
-					{
-						'fileId': this.getId(),
-						'revisionId': item.id
-					}), mxUtils.bind(this, function(resp)
-					{
-						this.ui.drive.getXmlFile(resp, mxUtils.bind(this, function(file)
-			   			{
-							itemSuccess(file.getData());
-			   			}), itemError);
-					}), itemError);
+					this.ui.drive.getXmlFile(item, mxUtils.bind(this, function(file)
+		   			{
+						itemSuccess(file.getData());
+		   			}), itemError);
 				});
 				
 				item.getUrl = mxUtils.bind(this, function(page)

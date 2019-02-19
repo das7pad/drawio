@@ -197,13 +197,6 @@ var com;
 	                                    var graph_1 = this_1.createMxGraph();
 	                                    graph_1.getModel().beginUpdate();
 	                                    this_1.importPage(page_1, graph_1, graph_1.getDefaultParent());
-	                                    var backPage = page_1.getBackPage();
-	                                    if (backPage != null) {
-	                                        graph_1.getModel().setValue(graph_1.getDefaultParent(), page_1.getPageName());
-	                                        var backCell = new mxCell(backPage.getPageName());
-	                                        graph_1.addCell(backCell, graph_1.getModel().getRoot(), 0, null, null);
-	                                        this_1.importPage(backPage, graph_1, graph_1.getDefaultParent());
-	                                    }
 	                                    this_1.scaleGraph(graph_1, page_1.getPageScale() / page_1.getDrawingScale());
 	                                    graph_1.getModel().endUpdate();
 	                                    /* append */ (function (sb) { return sb.str = sb.str.concat(_this.RESPONSE_DIAGRAM_START); })(xmlBuilder);
@@ -223,7 +216,7 @@ var com;
 	                    //console.log(xmlBuilder.str);
 	                    if (callback) 
 	                    {
-	                    		callback(xmlBuilder.str);
+                     		callback(xmlBuilder.str);
 	                    }
                     };
 
@@ -573,7 +566,19 @@ var com;
                  * @param {*} parent The parent of the elements to be imported.
                  * @return {number}
                  */
-                mxVsdxCodec.prototype.importPage = function (page, graph, parent) {
+                mxVsdxCodec.prototype.importPage = function (page, graph, parent) 
+                {
+                	//BackPages can include another backPage, so it is recursive
+                	var backPage = page.getBackPage();
+                    
+                	if (backPage != null) 
+                    {
+                        graph.getModel().setValue(graph.getDefaultParent(), page.getPageName());
+                        var backCell = new mxCell(backPage.getPageName());
+                        graph.addCell(backCell, graph.getModel().getRoot(), 0, null, null);
+                        this.importPage(backPage, graph, graph.getDefaultParent());
+                    }
+                	
                 	//add page layers
                 	var layers = page.getLayers();
                 	this.layersMap[0] = graph.getDefaultParent();
@@ -1256,7 +1261,7 @@ var com;
                     _this.RESPONSE_HEADER = "";
                     return _this;
                 }
-                mxVssxCodec.prototype.decodeVssx = function (file, callback, charset) {
+                mxVssxCodec.prototype.decodeVssx = function (file, callback, charset, onerror) {
                 	var _this = this;
                     var library = { str: "<mxlibrary>[", toString: function () { return this.str; } };
                     this.decodeVsdx(file, function(shapesInPages) 
@@ -1361,7 +1366,21 @@ var com;
                         /* append */ (function (sb) { return sb.str = sb.str.concat("]</mxlibrary>"); })(library);
                         if (callback)
                     	{
-                        	callback(library.str);
+	                    	try
+	                    	{
+	                    		callback(library.str);
+	                    	}
+	                    	catch(e)
+	                    	{
+	                    		if (onerror != null) 
+	                    		{
+	                    			onerror(e);
+	                    		}
+	                    		else
+	                    		{
+	                    			callback("");
+	                    		}
+	                    	}
                     	}
                     }, charset);
                 };
@@ -2959,16 +2978,14 @@ var com;
                                                     var entry = array132[index131];
                                                     {
                                                         var page = entry.getValue();
-                                                        if (!page.isBackground()) {
-                                                            var backId = page.getBackPageId();
-                                                            if (backId != null) {
-                                                                var background = (function (m, k) { if (m.entries == null)
-                                                                    m.entries = []; for (var i = 0; i < m.entries.length; i++)
-                                                                    if (m.entries[i].key.equals != null && m.entries[i].key.equals(k) || m.entries[i].key === k) {
-                                                                        return m.entries[i].value;
-                                                                    } return null; })(backgroundMap, backId);
-                                                                page.setBackPage(background);
-                                                            }
+                                                        var backId = page.getBackPageId();
+                                                        if (backId != null) {
+                                                            var background = (function (m, k) { if (m.entries == null)
+                                                                m.entries = []; for (var i = 0; i < m.entries.length; i++)
+                                                                if (m.entries[i].key.equals != null && m.entries[i].key.equals(k) || m.entries[i].key === k) {
+                                                                    return m.entries[i].value;
+                                                                } return null; })(backgroundMap, backId);
+                                                            page.setBackPage(background);
                                                         }
                                                     }
                                                 }
@@ -3086,7 +3103,7 @@ var com;
                             return o1 === o2;
                         } })(backGround, com.mxgraph.io.vsdx.mxVsdxConstants.TRUE)) ? true : false;
                         var back = pageElem.getAttribute(com.mxgraph.io.vsdx.mxVsdxConstants.BACK_PAGE);
-                        if (!this.__isBackground && back != null && back.length > 0) {
+                        if (back != null && back.length > 0) {
                             this.backPageId = parseFloat(back);
                         }
                         this.Id = parseFloat(pageElem.getAttribute(com.mxgraph.io.vsdx.mxVsdxConstants.ID));
@@ -11897,7 +11914,7 @@ EditorUi.prototype.doImportVisio = function(file, done, onerror)
 {
 	if (file.name != null && /(\.vs(x|sx?))($|\?)/i.test(file.name))
 	{
-		new com.mxgraph.io.mxVssxCodec().decodeVssx(file, done);
+		new com.mxgraph.io.mxVssxCodec().decodeVssx(file, done, null, onerror);
 	}
 	else
 	{
