@@ -20,6 +20,7 @@ app:
 	ant app
 
 $(build)/constants.min.js: constants.js
+	mkdir -p $(build)
 	$(jscompile) \
 		--js_output_file $@ \
 		$<
@@ -57,9 +58,6 @@ war: app
 war: javac
 war:
 	ant war
-
-$(build):
-	mkdir -p $(build)
 
 %.class: %.java
 	javac $<
