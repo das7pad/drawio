@@ -47,6 +47,7 @@ public class Xml2Js
 		File[] dirs = root.listFiles((f, s) -> new File(f, s).isDirectory());
 		if (dirs != null)
 		{
+			Arrays.sort(dirs);
 			for (File f : dirs)
 			{
 				result.addAll(walk(base, f));
@@ -56,6 +57,7 @@ public class Xml2Js
 		File[] files = root.listFiles((f, name) -> name.endsWith(".xml"));
 		if (files != null)
 		{
+			Arrays.sort(files);
 			for (File f : files)
 			{
 				String name = f.getCanonicalPath()
