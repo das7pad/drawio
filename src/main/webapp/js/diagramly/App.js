@@ -1086,28 +1086,30 @@ App.prototype.init = function()
 		{
 			this.mode = App.mode;
 		}
-		
-		// Checks if the cache is alive
-		var acceptResponse = true;
-		
-		var timeoutThread = window.setTimeout(mxUtils.bind(this, function()
-		{
-			acceptResponse = false;
-			EditorUi.logEvent({category: 'Cache', action: 'alive', label: 408});
-		}), this.timeout);
-		
-		var t0 = new Date().getTime();
-		
-		mxUtils.get(EditorUi.cacheUrl + '?alive', mxUtils.bind(this, function(req)
-		{
-			window.clearTimeout(timeoutThread);
-			
-			if (acceptResponse)
+
+		if (urlParams['stealth'] !== '1') {
+			// Checks if the cache is alive
+			var acceptResponse = true;
+
+			var timeoutThread = window.setTimeout(mxUtils.bind(this, function()
 			{
-				EditorUi.logEvent({category: 'Cache', action: 'alive', label:
-					req.getStatus() + '.' + (new Date().getTime() - t0)});
-			}
-		}));
+				acceptResponse = false;
+				EditorUi.logEvent({category: 'Cache', action: 'alive', label: 408});
+			}), this.timeout);
+
+			var t0 = new Date().getTime();
+
+			mxUtils.get(EditorUi.cacheUrl + '?alive', mxUtils.bind(this, function(req)
+			{
+				window.clearTimeout(timeoutThread);
+
+				if (acceptResponse)
+				{
+					EditorUi.logEvent({category: 'Cache', action: 'alive', label:
+							req.getStatus() + '.' + (new Date().getTime() - t0)});
+				}
+			}));
+		}
 	}
 	else if (this.menubar != null)
 	{
