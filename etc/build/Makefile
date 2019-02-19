@@ -2,6 +2,11 @@ build = ../../build
 src = ../../src
 webapp = $(src)/main/webapp
 
+jscompile = java \
+	-jar compiler.jar \
+	--compilation_level SIMPLE \
+	--rewrite_polyfills false
+
 
 .PHONY: all
 all: app
@@ -25,9 +30,7 @@ $(webapp)/cache.manifest:
 	sed "s#%%DATE%%#$(shell date +'%m/%d/%Y %I:%M %p')#" $< > $@
 
 $(webapp)/js/shapes.min.js: $(shell find $(webapp)/shapes)
-	java -jar compiler.jar \
-		--compilation_level SIMPLE \
-		--rewrite_polyfills false \
+	$(jscompile) \
 		--js_output_file $@ \
 		$(sort $(shell find $(webapp)/shapes/ -type f -name "*.js"))
 
