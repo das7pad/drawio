@@ -27,16 +27,12 @@ $(webapp)/cache.manifest:
 	" > $@
 	cat $^ >> $@
 
-$(build)/shapes.js: $(build)
-$(build)/shapes.js: $(shell find $(webapp)/shapes)
-	cat $(sort $(shell find $(webapp)/shapes/ -type f -name "*.js")) > $@
-
-$(webapp)/js/shapes.min.js: $(build)/shapes.js
+$(webapp)/js/shapes.min.js: $(shell find $(webapp)/shapes)
 	java -jar compiler.jar \
 		--compilation_level SIMPLE \
 		--rewrite_polyfills false \
 		--js_output_file $@ \
-		$(build)/shapes.js
+		$(sort $(shell find $(webapp)/shapes/ -type f -name "*.js"))
 
 .PHONY: javac
 javac:
