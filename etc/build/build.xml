@@ -22,17 +22,6 @@
 			</sources>
 		</jscomp>
 		
-		<tstamp>
-      		<format property="time.stamp" pattern="MM/dd/yyyy hh:mm aa" unit="hour"/>
-  		</tstamp>
-		
-		<echo file="${war.dir}/cache.manifest" append="false">CACHE MANIFEST${line.separator}${line.separator}</echo>
-		<echo file="${war.dir}/cache.manifest" append="true"># THIS FILE WAS GENERATED. DO NOT MODIFY!${line.separator}</echo>
-		<echo file="${war.dir}/cache.manifest" append="true"># ${time.stamp}${line.separator}${line.separator}</echo>
-	    	<concat destfile="${war.dir}/cache.manifest" fixlastline="yes" append="true">
-	    		<filelist dir="${basedir}" files="cache.txt"/>
-	    	</concat>
-    	
 		<delete dir="${basedir}/../../build"/>
 	</target>
 
