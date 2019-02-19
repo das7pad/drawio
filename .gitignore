@@ -2,3 +2,17 @@ bin
 build
 classes
 node_modules
+
+# generated during build
+src/main/webapp/cache.manifest
+*.min.js
+
+# vendor files
+!/src/main/webapp/js/cryptojs/aes.min.js
+!/src/main/webapp/js/deflate/pako.min.js
+!/src/main/webapp/js/dropbox/Dropbox-sdk.min.js
+!/src/main/webapp/js/json/json2.min.js
+!/src/main/webapp/js/jszip/jszip.min.js
+!/src/main/webapp/js/sanitizer/sanitizer.min.js
+!/src/main/webapp/js/spin/spin.min.js
+!/src/main/webapp/plugins/webcola/cola.min.js
