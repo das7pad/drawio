@@ -35,6 +35,7 @@ $(webapp)/js/shapes.min.js: $(shell find $(webapp)/shapes)
 		--js_output_file $@ \
 		$(sort $(shell find $(webapp)/shapes/ -type f -name "*.js"))
 
+$(webapp)/js/stencils.min.js: Xml2Js.class
 $(webapp)/js/stencils.min.js: $(shell find $(webapp)/stencils)
 	java Xml2Js $(webapp)/stencils/ $@
 
@@ -52,3 +53,6 @@ war:
 
 $(build):
 	mkdir -p $(build)
+
+%.class: %.java
+	javac $<

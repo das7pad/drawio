@@ -4,3 +4,6 @@ classes
 node_modules
 
 !etc/build
+
+# compiled java bytecode
+*.class
