@@ -11,12 +11,6 @@
 			<arg value="../../src/main/webapp/js/stencils.min.js"/>
 		</java>
 		
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${war.dir}/js/shapes.min.js">
-			<sources dir="${basedir}/../../build">
-				<file name="shapes.js" />
-			</sources>
-		</jscomp>
-		
 		<delete dir="${basedir}/../../build"/>
 	</target>
 

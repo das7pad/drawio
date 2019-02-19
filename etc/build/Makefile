@@ -13,7 +13,7 @@ app:
 
 .PHONY: merge
 merge: $(webapp)/cache.manifest
-merge: $(build)/shapes.js
+merge: $(webapp)/js/shapes.min.js
 merge:
 	ant merge
 
@@ -30,6 +30,13 @@ $(webapp)/cache.manifest:
 $(build)/shapes.js: $(build)
 $(build)/shapes.js: $(shell find $(webapp)/shapes)
 	cat $(sort $(shell find $(webapp)/shapes/ -type f -name "*.js")) > $@
+
+$(webapp)/js/shapes.min.js: $(build)/shapes.js
+	java -jar compiler.jar \
+		--compilation_level SIMPLE \
+		--rewrite_polyfills false \
+		--js_output_file $@ \
+		$(build)/shapes.js
 
 .PHONY: javac
 javac:
