@@ -1,3 +1,4 @@
+build = ../../build
 src = ../../src
 webapp = $(src)/main/webapp
 
@@ -36,3 +37,6 @@ clean:
 .PHONY: war
 war:
 	ant war
+
+$(build):
+	mkdir -p $(build)
