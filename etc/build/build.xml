@@ -133,12 +133,6 @@
 			</sources>
 		</jscomp>
 
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/constants.min.js">
-			<sources dir="${basedir}">
-				<file name="constants.js"/>
-			</sources>
-		</jscomp>
-			
 		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/.tmp1.js">
 			<sources dir="${grapheditor.dir}">
 				<file name="Editor.js" />
@@ -169,7 +163,7 @@
 		</jscomp>
 		
 		<concat destfile="${basedir}/base-viewer.min.js" fixlastline="yes" append="no">
-			<filelist dir="${basedir}" files="constants.min.js"/>
+			<filelist dir="${build.dir}" files="constants.min.js"/>
 			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
@@ -204,7 +198,6 @@
     		</concat>
 
 		<delete file="${war.dir}/js/extensions.min.js"/>
-		<delete file="${basedir}/constants.min.js"/>
 		<delete file="${basedir}/.tmp1.js"/>
 		<delete file="${basedir}/.tmp2.js"/>
 		<delete file="${basedir}/.tmp2.min.js"/>

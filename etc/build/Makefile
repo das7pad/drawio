@@ -15,8 +15,14 @@ all:
 
 .PHONY: app
 app: merge
+app: $(build)/constants.min.js
 app:
 	ant app
+
+$(build)/constants.min.js: constants.js
+	$(jscompile) \
+		--js_output_file $@ \
+		$<
 
 .PHONY: merge
 merge: $(webapp)/cache.manifest
