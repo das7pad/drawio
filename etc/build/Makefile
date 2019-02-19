@@ -4,10 +4,12 @@ webapp = $(src)/main/webapp
 
 
 .PHONY: all
+all: app
 all:
 	ant all
 
 .PHONY: app
+app: merge
 app:
 	ant app
 
@@ -42,6 +44,8 @@ clean:
 	ant clean
 
 .PHONY: war
+war: app
+war: javac
 war:
 	ant war
 

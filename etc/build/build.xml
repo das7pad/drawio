@@ -9,7 +9,7 @@
 		<delete dir="${basedir}/../../build"/>
 	</target>
 
-	<target name="app" depends="merge">
+	<target name="app">
 		<delete file="${basedir}/constants.js"/>
 		<echo file="${basedir}/constants.js">
 			window.STENCIL_PATH = window.STENCIL_PATH || 'https://www.draw.io/stencils';
@@ -351,7 +351,7 @@
 		<delete file="${basedir}/.tmp1.js"/>
 	</target>
 
-	<target name="all" depends="app">
+	<target name="all">
 	</target>
 
 	<!-- ================== Stand-alone war creation ============================= -->
@@ -360,7 +360,7 @@
 		<fileset dir="${war.dir}/WEB-INF/lib" />
 	</path>
 
-	<target name="javac" depends="app" description="Java compilation">
+	<target name="javac" description="Java compilation">
 		<mkdir dir="${javac.dir}"/>
 		<javac includeantruntime="false" srcdir="${src.dir}" excludes="**/EmbedServlet2.java" destdir="${javac.dir}">
 			<classpath refid="javac.class.path" />
@@ -379,7 +379,7 @@
 		<delete file="${basedir}/base-viewer.min.js"/>
 	</target>
 	
-	<target name="war" depends="javac" description="Create the stand-alone war file">
+	<target name="war" description="Create the stand-alone war file">
 		<zip destfile="${build.dir}/${war.name}" basedir="${war.dir}" >
 		</zip>
 	</target>
