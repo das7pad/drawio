@@ -4,6 +4,7 @@ webapp = $(src)/main/webapp
 styles = $(webapp)/styles
 sidebar = $(webapp)/js/diagramly/sidebar
 grapheditor = $(webapp)/js/mxgraph
+version = $(shell cat ../../VERSION)
 
 GRAPHEDITOR_FILES = $(filter-out \
 	$(grapheditor)/Init.js,$(wildcard $(grapheditor)/*.js))
@@ -91,6 +92,8 @@ jscompile_prerequisites = $(jscompile) \
 
 concat_prerequisites = cat $(sort $^) > $@
 
+insert_version = sed -i s/@DRAWIO-VERSION@/$(version)/g $@
+
 
 .PHONY: all
 all: app
@@ -99,7 +102,6 @@ all:
 
 .PHONY: app
 app: merge
-app: $(build)/app.in.min.js
 app: $(build)/base-viewer.min.js
 app: $(build)/client.min.js
 app: $(build)/constants.min.js
@@ -111,6 +113,7 @@ app: $(build)/sidebar.min.js
 app: $(build)/default.min.xml
 app: $(build)/dark-default.min.xml
 app: $(build)/dia.txt
+app: $(webapp)/js/app.min.js
 app: $(webapp)/js/extensions.min.js
 app: $(webapp)/js/viewer.min.js
 app:
@@ -123,6 +126,17 @@ $(build)/%.min.js: %.js
 $(build)/app.in.min.js: $(APP_FILES_DIAGRAMLY)
 $(build)/app.in.min.js: $(build)/Graph-Stylesheet.js
 	$(jscompile_prerequisites)
+
+$(webapp)/js/app.min.js: $(build)/app.in.min.js
+$(webapp)/js/app.min.js: $(build)/client.min.js
+$(webapp)/js/app.min.js: $(build)/grapheditor.min.js
+$(webapp)/js/app.min.js: $(build)/sidebar.min.js
+$(webapp)/js/app.min.js: $(webapp)/js/cryptojs/aes.min.js
+$(webapp)/js/app.min.js: $(webapp)/js/deflate/pako.min.js
+$(webapp)/js/app.min.js: $(webapp)/js/sanitizer/sanitizer.min.js
+$(webapp)/js/app.min.js: $(webapp)/js/spin/spin.min.js
+	$(concat_prerequisites)
+	$(insert_version)
 
 $(build)/base-viewer.min.js: $(VIEWER_FILES_MXGRAPH)
 $(build)/base-viewer.min.js: $(VIEWER_FILES_DIAGRAMLY)

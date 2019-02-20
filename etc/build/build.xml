@@ -9,18 +9,6 @@
 	</target>
 
 	<target name="app">
-		<loadfile property="version" srcFile="../../VERSION"/>
-
-		<concat destfile="${war.dir}/js/app.min.js" fixlastline="yes" append="no">
-			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
-			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
-			<filelist dir="${war.dir}/js/cryptojs" files="aes.min.js"/>
-			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${build.dir}" files="app.in.min.js"/>
-			<filelist dir="${build.dir}" files="sidebar.min.js,grapheditor.min.js,client.min.js"/>
-    	</concat>
-
-		<replace file="${war.dir}/js/app.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
 	</target>
 
 	<target name="all">
