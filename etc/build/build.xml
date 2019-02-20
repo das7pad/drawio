@@ -11,46 +11,8 @@
 	<target name="app">
 		<delete file="${war.dir}/js/extensions.min.js"/>
 
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/base.in.min.js">
-			<sources dir="${war.dir}/js/diagramly">
-				<file name="DrawioFile.js" />
-				<file name="LocalFile.js" />
-				<file name="LocalLibrary.js" />
-				<file name="StorageFile.js" />
-				<file name="StorageLibrary.js" />
-				<file name="UrlLibrary.js" />
-				<file name="Dialogs.js" />
-				<file name="Editor.js" />
-				<file name="EditorUi.js" />
-				<file name="DiffSync.js" />
-				<file name="Settings.js" />
-				<file name="DrawioFileSync.js" />
-				<file name="App.js" />
-				<file name="Menus.js" />
-				<file name="Pages.js" />
-				<file name="Trees.js" />
-				<file name="Minimal.js" />
-				<file name="DistanceGuides.js" />
-			</sources>
-				
-			<sources dir="${build.dir}">
-				<file name="Graph-Stylesheet.js" />
-			</sources>
-		</jscomp>
-			
-		<concat destfile="${basedir}/base.min.js" fixlastline="yes" append="no">
-			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
-			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
-			<filelist dir="${war.dir}/js/cryptojs" files="aes.min.js"/>
-			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files="base.in.min.js"/>
-			<filelist dir="${build.dir}" files="sidebar.min.js,grapheditor.min.js,client.min.js"/>
-    	</concat>
-		<delete file="${basedir}/base.in.min.js"/>
-
 		<loadfile property="version" srcFile="../../VERSION"/>
-		<replace file="${basedir}/base.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
-		
+
 		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${war.dir}/js/extensions.min.js">
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="Extensions.js" />
@@ -162,7 +124,6 @@
 			<fileset dir="${build.dir}">
 			</fileset>
 		</delete>
-		<delete file="${basedir}/base.min.js"/>
 	</target>
 	
 	<target name="war" description="Create the stand-alone war file">
