@@ -3,6 +3,10 @@ src = ../../src
 webapp = $(src)/main/webapp
 styles = $(webapp)/styles
 sidebar = $(webapp)/js/diagramly/sidebar
+grapheditor = $(webapp)/js/mxgraph
+
+GRAPHEDITOR_FILES = $(filter-out \
+	$(grapheditor)/Init.js,$(wildcard $(grapheditor)/*.js))
 
 jscompile = java \
 	-jar compiler.jar \
@@ -18,6 +22,7 @@ all:
 .PHONY: app
 app: merge
 app: $(build)/constants.min.js
+app: $(build)/grapheditor.min.js
 app: $(build)/init-viewer.min.js
 app: $(build)/sidebar.min.js
 app: $(build)/default.min.xml
@@ -31,6 +36,12 @@ $(build)/%.min.js: %.js
 	$(jscompile) \
 		--js_output_file $@ \
 		$<
+
+$(build)/grapheditor.min.js: $(grapheditor)
+$(build)/grapheditor.min.js: $(GRAPHEDITOR_FILES)
+	$(jscompile) \
+		--js_output_file $@ \
+		$(sort $(GRAPHEDITOR_FILES))
 
 $(build)/sidebar.min.js: $(shell find $(sidebar))
 	$(jscompile) \
