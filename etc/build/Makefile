@@ -14,6 +14,10 @@ jscompile = java \
 	--compilation_level SIMPLE \
 	--rewrite_polyfills false
 
+jscompile_prerequisites = $(jscompile) \
+	--js_output_file $@ \
+	$(sort $(filter %.js,$^))
+
 
 .PHONY: all
 all: app
@@ -35,29 +39,21 @@ app:
 
 $(build)/%.min.js: %.js
 	mkdir -p $(build)
-	$(jscompile) \
-		--js_output_file $@ \
-		$<
+	$(jscompile_prerequisites)
 
 $(build)/client.min.js: ../mxgraph/mxClient.js
 $(build)/client.min.js: $(grapheditor)/Init.js
 $(build)/client.min.js: $(webapp)/js/deflate/base64.js
 $(build)/client.min.js: $(webapp)/js/diagramly/Init.js
 $(build)/client.min.js: $(webapp)/js/jscolor/jscolor.js
-	$(jscompile) \
-		--js_output_file $@ \
-		$(sort $^)
+	$(jscompile_prerequisites)
 
 $(build)/grapheditor.min.js: $(grapheditor)
 $(build)/grapheditor.min.js: $(GRAPHEDITOR_FILES)
-	$(jscompile) \
-		--js_output_file $@ \
-		$(sort $(GRAPHEDITOR_FILES))
+	$(jscompile_prerequisites)
 
 $(build)/sidebar.min.js: $(shell find $(sidebar))
-	$(jscompile) \
-		--js_output_file $@ \
-		$(sort $(wildcard $(sidebar)/*.js))
+	$(jscompile_prerequisites)
 
 $(build)/%.min.xml: $(styles)/%.xml
 	tr --delete '\n' < $< | sed "s/'/\\\\'/g;s/\t//g;" > $@
@@ -77,9 +73,7 @@ $(webapp)/cache.manifest:
 	sed "s#%%DATE%%#$(shell date +'%m/%d/%Y %I:%M %p')#" $< > $@
 
 $(webapp)/js/shapes.min.js: $(shell find $(webapp)/shapes)
-	$(jscompile) \
-		--js_output_file $@ \
-		$(sort $(shell find $(webapp)/shapes/ -type f -name "*.js"))
+	$(jscompile_prerequisites)
 
 $(webapp)/js/stencils.min.js: Xml2Js.class
 $(webapp)/js/stencils.min.js: $(shell find $(webapp)/stencils)
