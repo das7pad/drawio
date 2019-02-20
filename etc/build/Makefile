@@ -117,6 +117,7 @@ $(build)/app.in.min.js: $(APP_FILES_DIAGRAMLY)
 $(build)/app.in.min.js: $(build)/Graph-Stylesheet.js
 	$(jscompile_prerequisites)
 
+$(webapp)/js/app.min.js: $(version)
 $(webapp)/js/app.min.js: $(build)/app.in.min.js
 $(webapp)/js/app.min.js: $(build)/client.min.js
 $(webapp)/js/app.min.js: $(build)/grapheditor.min.js
