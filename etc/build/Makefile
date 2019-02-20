@@ -97,6 +97,7 @@ concat_prerequisites = cat $(sort $(prerequisites)) > $@
 
 insert_version = sed -i s/@DRAWIO-VERSION@/$(shell cat $(version))/g $@
 
+$(shell mkdir -p $(build))
 
 .PHONY: all
 all: app
@@ -110,7 +111,6 @@ app: $(webapp)/js/viewer.min.js
 app:
 
 $(build)/%.min.js: %.js
-	mkdir -p $(build)
 	$(jscompile_prerequisites)
 
 $(build)/app.in.min.js: $(APP_FILES_DIAGRAMLY)
