@@ -6,7 +6,6 @@
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="${jscompiler}" />
 
 	<target name="merge">
-		<delete dir="${basedir}/../../build"/>
 	</target>
 
 	<target name="app">
