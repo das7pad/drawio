@@ -28,6 +28,7 @@ all:
 app: merge
 app: $(build)/client.min.js
 app: $(build)/constants.min.js
+app: $(build)/Graph-Stylesheet.js
 app: $(build)/grapheditor.min.js
 app: $(build)/init-viewer.min.js
 app: $(build)/sidebar.min.js
@@ -47,6 +48,14 @@ $(build)/client.min.js: $(webapp)/js/deflate/base64.js
 $(build)/client.min.js: $(webapp)/js/diagramly/Init.js
 $(build)/client.min.js: $(webapp)/js/jscolor/jscolor.js
 	$(jscompile_prerequisites)
+
+$(build)/Graph-Stylesheet.js: Graph-Stylesheet.in.js
+$(build)/Graph-Stylesheet.js: $(build)/default.min.xml
+$(build)/Graph-Stylesheet.js: $(build)/dark-default.min.xml
+	cp Graph-Stylesheet.in.js $@
+	for file in default dark-default; do \
+		sed -i "s^%$$file%^`cat $(build)/$$file.min.xml`^" $@; \
+	done
 
 $(build)/grapheditor.min.js: $(grapheditor)
 $(build)/grapheditor.min.js: $(GRAPHEDITOR_FILES)

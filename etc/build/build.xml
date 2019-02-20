@@ -9,18 +9,6 @@
 	</target>
 
 	<target name="app">
-		<delete file="${basedir}/Graph-Stylesheet.js"/>
-		<echo file="${basedir}/Graph-Stylesheet.js">Graph.prototype.defaultThemes[Graph.prototype.defaultThemeName] = mxUtils.parseXml('</echo>
-		<concat destfile="${basedir}/Graph-Stylesheet.js" fixlastline="no" append="true">
-			<filelist dir="${build.dir}" files="default.min.xml"/>
-    		</concat>
-		<echo file="${basedir}/Graph-Stylesheet.js" append="true">').documentElement;</echo>
-		<echo file="${basedir}/Graph-Stylesheet.js" append="true">Graph.prototype.defaultThemes['darkTheme'] = mxUtils.parseXml('</echo>
-		<concat destfile="${basedir}/Graph-Stylesheet.js" fixlastline="no" append="true">
-			<filelist dir="${build.dir}" files="dark-default.min.xml"/>
-    		</concat>
-		<echo file="${basedir}/Graph-Stylesheet.js" append="true">').documentElement;</echo>
-
 		<delete file="${basedir}/Graph-Resources.js"/>
 		<echo file="${basedir}/Graph-Resources.js">mxResources.parse('</echo>
 		<concat destfile="${basedir}/Graph-Resources.js" fixlastline="no" append="true">
@@ -49,6 +37,9 @@
 					
 			<sources dir="${basedir}">
 				<file name="Graph-Resources.js" />
+			</sources>
+
+			<sources dir="${build.dir}">
 				<file name="Graph-Stylesheet.js" />
 			</sources>
 
@@ -95,7 +86,7 @@
 				<file name="DistanceGuides.js" />
 			</sources>
 				
-			<sources dir="${basedir}">
+			<sources dir="${build.dir}">
 				<file name="Graph-Stylesheet.js" />
 			</sources>
 		</jscomp>
@@ -147,7 +138,7 @@
 				<file name="DrawioFileSync.js" />
 			</sources>
 				
-			<sources dir="${basedir}">
+			<sources dir="${build.dir}">
 				<file name="Graph-Stylesheet.js" />
 			</sources>
 
@@ -197,7 +188,6 @@
 
 		<replace file="${war.dir}/js/app.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
 
-		<delete file="${basedir}/Graph-Stylesheet.js"/>
 		<delete file="${basedir}/Graph-Resources.js"/>
 		<delete file="${basedir}/app.in.min.js"/>
 	</target>
