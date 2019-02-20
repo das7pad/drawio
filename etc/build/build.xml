@@ -9,27 +9,7 @@
 	</target>
 
 	<target name="app">
-		<delete file="${war.dir}/js/extensions.min.js"/>
-
 		<loadfile property="version" srcFile="../../VERSION"/>
-
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${war.dir}/js/extensions.min.js">
-			<sources dir="${war.dir}/js/diagramly">
-				<file name="Extensions.js" />
-			</sources>
-			<sources dir="${war.dir}/js/diagramly/vsdx">
-				<file name="VsdxExport.js" />
-				<file name="mxVsdxCanvas2D.js" />
-				<file name="bmpDecoder.js" />
-				<file name="importer.js" />
-			</sources>
-			<sources dir="${war.dir}/js/diagramly/graphml">
-				<file name="mxGraphMlCodec.js" />
-			</sources>
-		</jscomp>
-		<concat destfile="${war.dir}/js/extensions.min.js" fixlastline="yes" append="yes">
-	    		<fileset dir="${war.dir}/js/jszip" includes="**/*.min.js"/>
-	    	</concat>
 
 		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/app.in.min.js">
 			<sources dir="${war.dir}/js/diagramly">

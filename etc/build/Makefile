@@ -27,6 +27,15 @@ VIEWER_FILES_DIAGRAMLY = $(addprefix $(webapp)/js/diagramly/,\
 	Trees.js \
 )
 
+EXTENSIONS_FILES = $(addprefix $(webapp)/js/diagramly/,\
+	Extensions.js \
+	graphml/mxGraphMlCodec.js \
+	vsdx/VsdxExport.js \
+	vsdx/bmpDecoder.js \
+	vsdx/importer.js \
+	vsdx/mxVsdxCanvas2D.js \
+)
+
 jscompile = java \
 	-jar compiler.jar \
 	--charset UTF-8 \
@@ -58,6 +67,7 @@ app: $(build)/sidebar.min.js
 app: $(build)/default.min.xml
 app: $(build)/dark-default.min.xml
 app: $(build)/dia.txt
+app: $(webapp)/js/extensions.min.js
 app: $(webapp)/js/viewer.min.js
 app:
 	ant app
@@ -87,6 +97,13 @@ $(build)/client.min.js: $(webapp)/js/deflate/base64.js
 $(build)/client.min.js: $(webapp)/js/diagramly/Init.js
 $(build)/client.min.js: $(webapp)/js/jscolor/jscolor.js
 	$(jscompile_prerequisites)
+
+$(build)/extensions.in.min.js: $(EXTENSIONS_FILES)
+	$(jscompile_prerequisites)
+
+$(webapp)/js/extensions.min.js: $(build)/extensions.in.min.js
+$(webapp)/js/extensions.min.js: $(webapp)/js/jszip/jszip.min.js
+	$(concat_prerequisites)
 
 $(build)/Graph-Resources.js: Graph-Resources.in.js
 $(build)/Graph-Resources.js: $(build)/dia.txt
