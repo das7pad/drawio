@@ -135,6 +135,7 @@ $(build)/base-viewer.min.js: $(build)/Graph-Resources.js
 $(build)/base-viewer.min.js: $(build)/Graph-Stylesheet.js
 	$(jscompile_prerequisites)
 
+$(webapp)/js/viewer.min.js: $(version)
 $(webapp)/js/viewer.min.js: $(build)/base-viewer.min.js
 $(webapp)/js/viewer.min.js: $(build)/client.min.js
 $(webapp)/js/viewer.min.js: $(build)/constants.min.js
@@ -143,6 +144,7 @@ $(webapp)/js/viewer.min.js: $(webapp)/js/spin/spin.min.js
 $(webapp)/js/viewer.min.js: $(webapp)/js/sanitizer/sanitizer.min.js
 $(webapp)/js/viewer.min.js: $(webapp)/js/deflate/pako.min.js
 	$(concat_prerequisites)
+	$(insert_version)
 
 $(build)/client.min.js: ../mxgraph/mxClient.js
 $(build)/client.min.js: $(grapheditor)/Init.js
