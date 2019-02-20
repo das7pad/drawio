@@ -37,6 +37,8 @@ jscompile_prerequisites = $(jscompile) \
 	--js_output_file $@ \
 	$(sort $(filter %.js,$^))
 
+concat_prerequisites = cat $(sort $^) > $@
+
 
 .PHONY: all
 all: app
@@ -45,7 +47,7 @@ all:
 
 .PHONY: app
 app: merge
-app: $(build)/base-viewer.in.min.js
+app: $(build)/base-viewer.min.js
 app: $(build)/client.min.js
 app: $(build)/constants.min.js
 app: $(build)/Graph-Resources.js
@@ -68,6 +70,14 @@ $(build)/base-viewer.in.min.js: $(VIEWER_FILES_DIAGRAMLY)
 $(build)/base-viewer.in.min.js: $(build)/Graph-Resources.js
 $(build)/base-viewer.in.min.js: $(build)/Graph-Stylesheet.js
 	$(jscompile_prerequisites)
+
+$(build)/base-viewer.min.js: $(build)/base-viewer.in.min.js
+$(build)/base-viewer.min.js: $(build)/client.min.js
+$(build)/base-viewer.min.js: $(build)/constants.min.js
+$(build)/base-viewer.min.js: $(webapp)/js/spin/spin.min.js
+$(build)/base-viewer.min.js: $(webapp)/js/sanitizer/sanitizer.min.js
+$(build)/base-viewer.min.js: $(webapp)/js/deflate/pako.min.js
+	$(concat_prerequisites)
 
 $(build)/client.min.js: ../mxgraph/mxClient.js
 $(build)/client.min.js: $(grapheditor)/Init.js

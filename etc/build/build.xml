@@ -9,15 +9,8 @@
 	</target>
 
 	<target name="app">
-		<concat destfile="${basedir}/base-viewer.min.js" fixlastline="yes" append="no">
-			<filelist dir="${build.dir}" files="constants.min.js,client.min.js,base-viewer.in.min.js"/>
-			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
-			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
-			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-    	</concat>
-
 		<concat destfile="${war.dir}/js/viewer.min.js" fixlastline="yes" append="no">
-			<filelist dir="${basedir}" files="base-viewer.min.js"/>
+			<filelist dir="${build.dir}" files="base-viewer.min.js"/>
 			<filelist dir="${build.dir}" files="init-viewer.min.js"/>
     		</concat>
 
@@ -175,7 +168,6 @@
 			</fileset>
 		</delete>
 		<delete file="${basedir}/base.min.js"/>
-		<delete file="${basedir}/base-viewer.min.js"/>
 	</target>
 	
 	<target name="war" description="Create the stand-alone war file">
