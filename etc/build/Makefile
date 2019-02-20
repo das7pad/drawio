@@ -102,17 +102,6 @@ all:
 
 .PHONY: app
 app: merge
-app: $(build)/base-viewer.min.js
-app: $(build)/client.min.js
-app: $(build)/constants.min.js
-app: $(build)/Graph-Resources.js
-app: $(build)/Graph-Stylesheet.js
-app: $(build)/grapheditor.min.js
-app: $(build)/init-viewer.min.js
-app: $(build)/sidebar.min.js
-app: $(build)/default.min.xml
-app: $(build)/dark-default.min.xml
-app: $(build)/dia.txt
 app: $(webapp)/js/app.min.js
 app: $(webapp)/js/extensions.min.js
 app: $(webapp)/js/viewer.min.js
