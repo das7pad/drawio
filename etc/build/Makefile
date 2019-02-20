@@ -98,7 +98,6 @@ insert_version = sed -i s/@DRAWIO-VERSION@/$(version)/g $@
 .PHONY: all
 all: app
 all:
-	ant all
 
 .PHONY: app
 app: merge
@@ -106,7 +105,6 @@ app: $(webapp)/js/app.min.js
 app: $(webapp)/js/extensions.min.js
 app: $(webapp)/js/viewer.min.js
 app:
-	ant app
 
 $(build)/%.min.js: %.js
 	mkdir -p $(build)
@@ -188,7 +186,6 @@ merge: $(webapp)/cache.manifest
 merge: $(webapp)/js/shapes.min.js
 merge: $(webapp)/js/stencils.min.js
 merge:
-	ant merge
 
 $(webapp)/cache.manifest: cache.manifest.in
 $(webapp)/cache.manifest:
