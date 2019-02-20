@@ -10,6 +10,7 @@ GRAPHEDITOR_FILES = $(filter-out \
 
 jscompile = java \
 	-jar compiler.jar \
+	--charset UTF-8 \
 	--compilation_level SIMPLE \
 	--rewrite_polyfills false
 
