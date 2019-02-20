@@ -110,7 +110,7 @@ app: $(webapp)/js/extensions.min.js
 app: $(webapp)/js/viewer.min.js
 app:
 
-$(build)/%.min.js: %.js
+$(build)/%.min.js: js/%.js
 	$(jscompile_prerequisites)
 
 $(build)/app.in.min.js: $(APP_FILES_DIAGRAMLY)
@@ -160,16 +160,16 @@ $(webapp)/js/extensions.min.js: $(build)/extensions.in.min.js
 $(webapp)/js/extensions.min.js: $(webapp)/js/jszip/jszip.min.js
 	$(concat_prerequisites)
 
-$(build)/Graph-Resources.js: Graph-Resources.in.js
+$(build)/Graph-Resources.js: js/Graph-Resources.in.js
 $(build)/Graph-Resources.js: $(build)/dia.txt
 	sed "s^%dia%^`sed 's/\\\\/\\\\\\\\/g;s/\\&/\\\\&/g' $(build)/dia.txt`^" \
-		Graph-Resources.in.js \
+		js/Graph-Resources.in.js \
 		> $@
 
-$(build)/Graph-Stylesheet.js: Graph-Stylesheet.in.js
+$(build)/Graph-Stylesheet.js: js/Graph-Stylesheet.in.js
 $(build)/Graph-Stylesheet.js: $(build)/default.min.xml
 $(build)/Graph-Stylesheet.js: $(build)/dark-default.min.xml
-	cp Graph-Stylesheet.in.js $@
+	cp js/Graph-Stylesheet.in.js $@
 	for file in default dark-default; do \
 		sed -i "s^%$$file%^`cat $(build)/$$file.min.xml`^" $@; \
 	done
