@@ -150,7 +150,7 @@
 			<filelist dir="${basedir}" files="client.min.js,.tmp1.js"/>
     	</concat>
 
-		<echo file="${basedir}/.tmp2.js">
+		<echo file="${basedir}/init-viewer.js">
 			(function()
 			{
 				Editor.initMath();
@@ -167,20 +167,20 @@
 			})();
 		</echo>
 		
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/.tmp2.min.js">
+		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/init-viewer.min.js">
 			<sources dir="${basedir}">
-				<file name=".tmp2.js"/>
+				<file name="init-viewer.js"/>
 			</sources>
 		</jscomp>
 		
 		<concat destfile="${war.dir}/js/viewer.min.js" fixlastline="yes" append="no">
-			<filelist dir="${basedir}" files="base-viewer.min.js,.tmp2.min.js"/>
+			<filelist dir="${basedir}" files="base-viewer.min.js,init-viewer.min.js"/>
     		</concat>
 
 		<delete file="${war.dir}/js/extensions.min.js"/>
 		<delete file="${basedir}/.tmp1.js"/>
-		<delete file="${basedir}/.tmp2.js"/>
-		<delete file="${basedir}/.tmp2.min.js"/>
+		<delete file="${basedir}/init-viewer.js"/>
+		<delete file="${basedir}/init-viewer.min.js"/>
 
 		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/.tmp1.js">
 			<sources dir="${war.dir}/js/diagramly">
