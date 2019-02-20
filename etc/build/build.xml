@@ -27,28 +27,6 @@
 			<filelist dir="${build.dir}" files="dia.txt"/>
     		</concat>
 		<echo file="${basedir}/Graph-Resources.js" append="true">');</echo>
-		
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/client.min.js">
-			<sources dir="${war.dir}/js/deflate">
-				<file name="base64.js" />
-			</sources>
-
-			<sources dir="${war.dir}/js/diagramly">
-				<file name="Init.js" />
-			</sources>
-
-			<sources dir="${grapheditor.dir}">
-				<file name="Init.js" />
-			</sources>
-
-			<sources dir="${basedir}/../mxgraph">
-				<file name="mxClient.js" />
-			</sources>
-			
-			<sources dir="${war.dir}/js/jscolor">
-				<file name="jscolor.js" />
-			</sources>
-		</jscomp>
 
 		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/.tmp1.js">
 			<sources dir="${grapheditor.dir}">
@@ -80,11 +58,11 @@
 		</jscomp>
 		
 		<concat destfile="${basedir}/base-viewer.min.js" fixlastline="yes" append="no">
-			<filelist dir="${build.dir}" files="constants.min.js"/>
+			<filelist dir="${build.dir}" files="constants.min.js,client.min.js"/>
 			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files="client.min.js,.tmp1.js"/>
+			<filelist dir="${basedir}" files=".tmp1.js"/>
     	</concat>
 
 		<concat destfile="${war.dir}/js/viewer.min.js" fixlastline="yes" append="no">
@@ -127,8 +105,8 @@
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/cryptojs" files="aes.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files="client.min.js,.tmp1.js"/>
-			<filelist dir="${build.dir}" files="sidebar.min.js,grapheditor.min.js"/>
+			<filelist dir="${basedir}" files=".tmp1.js"/>
+			<filelist dir="${build.dir}" files="sidebar.min.js,grapheditor.min.js,client.min.js"/>
     	</concat>
 
 		<loadfile property="version" srcFile="../../VERSION"/>
@@ -214,15 +192,14 @@
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/cryptojs" files="aes.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files="client.min.js,.tmp1.js"/>
-			<filelist dir="${build.dir}" files="sidebar.min.js,grapheditor.min.js"/>
+			<filelist dir="${basedir}" files=".tmp1.js"/>
+			<filelist dir="${build.dir}" files="sidebar.min.js,grapheditor.min.js,client.min.js"/>
     	</concat>
 
 		<replace file="${war.dir}/js/app.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
 
 		<delete file="${basedir}/Graph-Stylesheet.js"/>
 		<delete file="${basedir}/Graph-Resources.js"/>
-		<delete file="${basedir}/client.min.js"/>
 		<delete file="${basedir}/.tmp1.js"/>
 	</target>
 

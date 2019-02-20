@@ -22,6 +22,7 @@ all:
 
 .PHONY: app
 app: merge
+app: $(build)/client.min.js
 app: $(build)/constants.min.js
 app: $(build)/grapheditor.min.js
 app: $(build)/init-viewer.min.js
@@ -37,6 +38,15 @@ $(build)/%.min.js: %.js
 	$(jscompile) \
 		--js_output_file $@ \
 		$<
+
+$(build)/client.min.js: ../mxgraph/mxClient.js
+$(build)/client.min.js: $(grapheditor)/Init.js
+$(build)/client.min.js: $(webapp)/js/deflate/base64.js
+$(build)/client.min.js: $(webapp)/js/diagramly/Init.js
+$(build)/client.min.js: $(webapp)/js/jscolor/jscolor.js
+	$(jscompile) \
+		--js_output_file $@ \
+		$(sort $^)
 
 $(build)/grapheditor.min.js: $(grapheditor)
 $(build)/grapheditor.min.js: $(GRAPHEDITOR_FILES)
