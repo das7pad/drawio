@@ -17,13 +17,14 @@ all:
 .PHONY: app
 app: merge
 app: $(build)/constants.min.js
+app: $(build)/init-viewer.min.js
 app: $(build)/default.min.xml
 app: $(build)/dark-default.min.xml
 app: $(build)/dia.txt
 app:
 	ant app
 
-$(build)/constants.min.js: constants.js
+$(build)/%.min.js: %.js
 	mkdir -p $(build)
 	$(jscompile) \
 		--js_output_file $@ \
