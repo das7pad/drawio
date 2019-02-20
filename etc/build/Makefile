@@ -2,6 +2,7 @@ build = ../../build
 src = ../../src
 webapp = $(src)/main/webapp
 styles = $(webapp)/styles
+sidebar = $(webapp)/js/diagramly/sidebar
 
 jscompile = java \
 	-jar compiler.jar \
@@ -18,6 +19,7 @@ all:
 app: merge
 app: $(build)/constants.min.js
 app: $(build)/init-viewer.min.js
+app: $(build)/sidebar.min.js
 app: $(build)/default.min.xml
 app: $(build)/dark-default.min.xml
 app: $(build)/dia.txt
@@ -29,6 +31,11 @@ $(build)/%.min.js: %.js
 	$(jscompile) \
 		--js_output_file $@ \
 		$<
+
+$(build)/sidebar.min.js: $(shell find $(sidebar))
+	$(jscompile) \
+		--js_output_file $@ \
+		$(sort $(wildcard $(sidebar)/*.js))
 
 $(build)/%.min.xml: $(styles)/%.xml
 	tr --delete '\n' < $< | sed "s/'/\\\\'/g;s/\t//g;" > $@
