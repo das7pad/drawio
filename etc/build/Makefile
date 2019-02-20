@@ -66,18 +66,19 @@ $(build)/%.min.js: %.js
 	mkdir -p $(build)
 	$(jscompile_prerequisites)
 
-$(build)/base-viewer.in.min.js: $(VIEWER_FILES_MXGRAPH)
-$(build)/base-viewer.in.min.js: $(VIEWER_FILES_DIAGRAMLY)
-$(build)/base-viewer.in.min.js: $(build)/Graph-Resources.js
-$(build)/base-viewer.in.min.js: $(build)/Graph-Stylesheet.js
+$(build)/base-viewer.min.js: $(VIEWER_FILES_MXGRAPH)
+$(build)/base-viewer.min.js: $(VIEWER_FILES_DIAGRAMLY)
+$(build)/base-viewer.min.js: $(build)/Graph-Resources.js
+$(build)/base-viewer.min.js: $(build)/Graph-Stylesheet.js
 	$(jscompile_prerequisites)
 
-$(build)/base-viewer.min.js: $(build)/base-viewer.in.min.js
-$(build)/base-viewer.min.js: $(build)/client.min.js
-$(build)/base-viewer.min.js: $(build)/constants.min.js
-$(build)/base-viewer.min.js: $(webapp)/js/spin/spin.min.js
-$(build)/base-viewer.min.js: $(webapp)/js/sanitizer/sanitizer.min.js
-$(build)/base-viewer.min.js: $(webapp)/js/deflate/pako.min.js
+$(webapp)/js/viewer.min.js: $(build)/base-viewer.min.js
+$(webapp)/js/viewer.min.js: $(build)/client.min.js
+$(webapp)/js/viewer.min.js: $(build)/constants.min.js
+$(webapp)/js/viewer.min.js: $(build)/init-viewer.min.js
+$(webapp)/js/viewer.min.js: $(webapp)/js/spin/spin.min.js
+$(webapp)/js/viewer.min.js: $(webapp)/js/sanitizer/sanitizer.min.js
+$(webapp)/js/viewer.min.js: $(webapp)/js/deflate/pako.min.js
 	$(concat_prerequisites)
 
 $(build)/client.min.js: ../mxgraph/mxClient.js
@@ -113,10 +114,6 @@ $(build)/%.min.xml: $(styles)/%.xml
 
 $(build)/dia.txt: $(webapp)/resources/dia.txt
 	tr '\n' '\v' < $< | sed "s/\v/\\\\n/g;s/'/\\\\'/g;" > $@
-
-$(webapp)/js/viewer.min.js: $(build)/init-viewer.min.js
-$(webapp)/js/viewer.min.js: $(build)/base-viewer.min.js
-	$(concat_prerequisites)
 
 .PHONY: merge
 merge: $(webapp)/cache.manifest
