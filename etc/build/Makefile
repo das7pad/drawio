@@ -58,6 +58,7 @@ app: $(build)/sidebar.min.js
 app: $(build)/default.min.xml
 app: $(build)/dark-default.min.xml
 app: $(build)/dia.txt
+app: $(webapp)/js/viewer.min.js
 app:
 	ant app
 
@@ -112,6 +113,10 @@ $(build)/%.min.xml: $(styles)/%.xml
 
 $(build)/dia.txt: $(webapp)/resources/dia.txt
 	tr '\n' '\v' < $< | sed "s/\v/\\\\n/g;s/'/\\\\'/g;" > $@
+
+$(webapp)/js/viewer.min.js: $(build)/init-viewer.min.js
+$(webapp)/js/viewer.min.js: $(build)/base-viewer.min.js
+	$(concat_prerequisites)
 
 .PHONY: merge
 merge: $(webapp)/cache.manifest

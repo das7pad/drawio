@@ -9,11 +9,6 @@
 	</target>
 
 	<target name="app">
-		<concat destfile="${war.dir}/js/viewer.min.js" fixlastline="yes" append="no">
-			<filelist dir="${build.dir}" files="base-viewer.min.js"/>
-			<filelist dir="${build.dir}" files="init-viewer.min.js"/>
-    		</concat>
-
 		<delete file="${war.dir}/js/extensions.min.js"/>
 
 		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/base.in.min.js">
