@@ -8,6 +8,25 @@ grapheditor = $(webapp)/js/mxgraph
 GRAPHEDITOR_FILES = $(filter-out \
 	$(grapheditor)/Init.js,$(wildcard $(grapheditor)/*.js))
 
+VIEWER_FILES_MXGRAPH = $(addprefix $(grapheditor)/,\
+	Editor.js \
+	Actions.js  \
+	EditorUi.js \
+	Graph.js \
+	Shapes.js \
+)
+
+VIEWER_FILES_DIAGRAMLY = $(addprefix $(webapp)/js/diagramly/,\
+	DrawioFile.js \
+	Editor.js \
+	EditorUi.js \
+	GraphViewer.js  \
+	LocalFile.js \
+	Minimal.js \
+	Pages.js \
+	Trees.js \
+)
+
 jscompile = java \
 	-jar compiler.jar \
 	--charset UTF-8 \
@@ -26,6 +45,7 @@ all:
 
 .PHONY: app
 app: merge
+app: $(build)/base-viewer.in.min.js
 app: $(build)/client.min.js
 app: $(build)/constants.min.js
 app: $(build)/Graph-Resources.js
@@ -41,6 +61,12 @@ app:
 
 $(build)/%.min.js: %.js
 	mkdir -p $(build)
+	$(jscompile_prerequisites)
+
+$(build)/base-viewer.in.min.js: $(VIEWER_FILES_MXGRAPH)
+$(build)/base-viewer.in.min.js: $(VIEWER_FILES_DIAGRAMLY)
+$(build)/base-viewer.in.min.js: $(build)/Graph-Resources.js
+$(build)/base-viewer.in.min.js: $(build)/Graph-Stylesheet.js
 	$(jscompile_prerequisites)
 
 $(build)/client.min.js: ../mxgraph/mxClient.js

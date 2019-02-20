@@ -9,43 +9,12 @@
 	</target>
 
 	<target name="app">
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/base-viewer.in.min.js">
-			<sources dir="${grapheditor.dir}">
-				<file name="Editor.js" />
-				<file name="EditorUi.js" />
-				<file name="Graph.js" />
-				<file name="Shapes.js" />
-				<file name="Actions.js" />
-			</sources>
-			
-			<sources dir="${war.dir}/js/diagramly">
-				<file name="DrawioFile.js" />
-				<file name="LocalFile.js" />
-				<file name="Editor.js" />
-				<file name="EditorUi.js" />
-				<file name="Pages.js" />
-				<file name="Trees.js" />
-				<file name="Minimal.js" />
-			</sources>
-					
-			<sources dir="${build.dir}">
-				<file name="Graph-Resources.js" />
-				<file name="Graph-Stylesheet.js" />
-			</sources>
-
-			<sources dir="${war.dir}/js/diagramly">
-				<file name="GraphViewer.js" />
-			</sources>
-		</jscomp>
-		
 		<concat destfile="${basedir}/base-viewer.min.js" fixlastline="yes" append="no">
-			<filelist dir="${build.dir}" files="constants.min.js,client.min.js"/>
+			<filelist dir="${build.dir}" files="constants.min.js,client.min.js,base-viewer.in.min.js"/>
 			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files="base-viewer.in.min.js"/>
     	</concat>
-		<delete file="${basedir}/base-viewer.in.min.js"/>
 
 		<concat destfile="${war.dir}/js/viewer.min.js" fixlastline="yes" append="no">
 			<filelist dir="${basedir}" files="base-viewer.min.js"/>
