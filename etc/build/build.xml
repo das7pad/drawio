@@ -9,13 +9,6 @@
 	</target>
 
 	<target name="app">
-		<delete file="${basedir}/Graph-Resources.js"/>
-		<echo file="${basedir}/Graph-Resources.js">mxResources.parse('</echo>
-		<concat destfile="${basedir}/Graph-Resources.js" fixlastline="no" append="true">
-			<filelist dir="${build.dir}" files="dia.txt"/>
-    		</concat>
-		<echo file="${basedir}/Graph-Resources.js" append="true">');</echo>
-
 		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/base-viewer.in.min.js">
 			<sources dir="${grapheditor.dir}">
 				<file name="Editor.js" />
@@ -35,11 +28,8 @@
 				<file name="Minimal.js" />
 			</sources>
 					
-			<sources dir="${basedir}">
-				<file name="Graph-Resources.js" />
-			</sources>
-
 			<sources dir="${build.dir}">
+				<file name="Graph-Resources.js" />
 				<file name="Graph-Stylesheet.js" />
 			</sources>
 
@@ -188,7 +178,6 @@
 
 		<replace file="${war.dir}/js/app.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
 
-		<delete file="${basedir}/Graph-Resources.js"/>
 		<delete file="${basedir}/app.in.min.js"/>
 	</target>
 

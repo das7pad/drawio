@@ -1,0 +1,1 @@
+mxResources.parse('%dia%');

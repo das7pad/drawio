@@ -28,6 +28,7 @@ all:
 app: merge
 app: $(build)/client.min.js
 app: $(build)/constants.min.js
+app: $(build)/Graph-Resources.js
 app: $(build)/Graph-Stylesheet.js
 app: $(build)/grapheditor.min.js
 app: $(build)/init-viewer.min.js
@@ -48,6 +49,12 @@ $(build)/client.min.js: $(webapp)/js/deflate/base64.js
 $(build)/client.min.js: $(webapp)/js/diagramly/Init.js
 $(build)/client.min.js: $(webapp)/js/jscolor/jscolor.js
 	$(jscompile_prerequisites)
+
+$(build)/Graph-Resources.js: Graph-Resources.in.js
+$(build)/Graph-Resources.js: $(build)/dia.txt
+	sed "s^%dia%^`sed 's/\\\\/\\\\\\\\/g;s/\\&/\\\\&/g' $(build)/dia.txt`^" \
+		Graph-Resources.in.js \
+		> $@
 
 $(build)/Graph-Stylesheet.js: Graph-Stylesheet.in.js
 $(build)/Graph-Stylesheet.js: $(build)/default.min.xml
