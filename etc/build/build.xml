@@ -28,7 +28,7 @@
     		</concat>
 		<echo file="${basedir}/Graph-Resources.js" append="true">');</echo>
 
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/.tmp1.js">
+		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/base-viewer.in.min.js">
 			<sources dir="${grapheditor.dir}">
 				<file name="Editor.js" />
 				<file name="EditorUi.js" />
@@ -62,8 +62,9 @@
 			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files=".tmp1.js"/>
+			<filelist dir="${basedir}" files="base-viewer.in.min.js"/>
     	</concat>
+		<delete file="${basedir}/base-viewer.in.min.js"/>
 
 		<concat destfile="${war.dir}/js/viewer.min.js" fixlastline="yes" append="no">
 			<filelist dir="${basedir}" files="base-viewer.min.js"/>
@@ -71,9 +72,8 @@
     		</concat>
 
 		<delete file="${war.dir}/js/extensions.min.js"/>
-		<delete file="${basedir}/.tmp1.js"/>
 
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/.tmp1.js">
+		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/base.in.min.js">
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="DrawioFile.js" />
 				<file name="LocalFile.js" />
@@ -105,9 +105,10 @@
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/cryptojs" files="aes.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files=".tmp1.js"/>
+			<filelist dir="${basedir}" files="base.in.min.js"/>
 			<filelist dir="${build.dir}" files="sidebar.min.js,grapheditor.min.js,client.min.js"/>
     	</concat>
+		<delete file="${basedir}/base.in.min.js"/>
 
 		<loadfile property="version" srcFile="../../VERSION"/>
 		<replace file="${basedir}/base.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
@@ -129,10 +130,8 @@
 		<concat destfile="${war.dir}/js/extensions.min.js" fixlastline="yes" append="yes">
 	    		<fileset dir="${war.dir}/js/jszip" includes="**/*.min.js"/>
 	    	</concat>
-		
-		<delete file="${basedir}/.tmp1.js"/>
-		
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/.tmp1.js">
+
+		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/app.in.min.js">
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="DrawioFile.js" />
 				<file name="LocalFile.js" />
@@ -192,7 +191,7 @@
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/cryptojs" files="aes.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files=".tmp1.js"/>
+			<filelist dir="${basedir}" files="app.in.min.js"/>
 			<filelist dir="${build.dir}" files="sidebar.min.js,grapheditor.min.js,client.min.js"/>
     	</concat>
 
@@ -200,7 +199,7 @@
 
 		<delete file="${basedir}/Graph-Stylesheet.js"/>
 		<delete file="${basedir}/Graph-Resources.js"/>
-		<delete file="${basedir}/.tmp1.js"/>
+		<delete file="${basedir}/app.in.min.js"/>
 	</target>
 
 	<target name="all">
