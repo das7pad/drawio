@@ -36,6 +36,49 @@ EXTENSIONS_FILES = $(addprefix $(webapp)/js/diagramly/,\
 	vsdx/mxVsdxCanvas2D.js \
 )
 
+APP_FILES_DIAGRAMLY = $(addprefix $(webapp)/js/diagramly/,\
+	App.js \
+	Dialogs.js \
+	DistanceGuides.js  \
+	Editor.js \
+	EditorUi.js \
+	Menus.js \
+	Minimal.js \
+	Pages.js \
+	Trees.js \
+	\
+	DrawioFile.js \
+	DiffSync.js \
+	DrawioFileSync.js  \
+	LocalFile.js \
+	LocalLibrary.js \
+	Settings.js \
+	StorageFile.js \
+	StorageLibrary.js \
+	UrlLibrary.js \
+	\
+	DrawioClient.js \
+	DrawioUser.js \
+	DriveClient.js \
+	DriveFile.js \
+	DriveLibrary.js \
+	DropboxClient.js \
+	DropboxFile.js \
+	DropboxLibrary.js \
+	GitHubClient.js \
+	GitHubFile.js \
+	GitHubLibrary.js \
+	OneDriveClient.js \
+	OneDriveFile.js \
+	OneDriveLibrary.js \
+	TrelloClient.js  \
+	TrelloFile.js \
+	TrelloLibrary.js \
+	\
+	util/mxAsyncCanvas.js \
+	util/mxJsCanvas.js \
+)
+
 jscompile = java \
 	-jar compiler.jar \
 	--charset UTF-8 \
@@ -56,6 +99,7 @@ all:
 
 .PHONY: app
 app: merge
+app: $(build)/app.in.min.js
 app: $(build)/base-viewer.min.js
 app: $(build)/client.min.js
 app: $(build)/constants.min.js
@@ -74,6 +118,10 @@ app:
 
 $(build)/%.min.js: %.js
 	mkdir -p $(build)
+	$(jscompile_prerequisites)
+
+$(build)/app.in.min.js: $(APP_FILES_DIAGRAMLY)
+$(build)/app.in.min.js: $(build)/Graph-Stylesheet.js
 	$(jscompile_prerequisites)
 
 $(build)/base-viewer.min.js: $(VIEWER_FILES_MXGRAPH)

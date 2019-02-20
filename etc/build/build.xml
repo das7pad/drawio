@@ -11,73 +11,16 @@
 	<target name="app">
 		<loadfile property="version" srcFile="../../VERSION"/>
 
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/app.in.min.js">
-			<sources dir="${war.dir}/js/diagramly">
-				<file name="DrawioFile.js" />
-				<file name="LocalFile.js" />
-				<file name="LocalLibrary.js" />
-				<file name="StorageFile.js" />
-				<file name="StorageLibrary.js" />
-				<file name="UrlLibrary.js" />
-				<file name="Dialogs.js" />
-				<file name="Editor.js" />
-				<file name="EditorUi.js" />
-				<file name="DiffSync.js" />
-				<file name="Settings.js" />
-				<file name="DrawioFileSync.js" />
-			</sources>
-				
-			<sources dir="${build.dir}">
-				<file name="Graph-Stylesheet.js" />
-			</sources>
-
-			<sources dir="${war.dir}/js/diagramly/util">
-				<file name="mxAsyncCanvas.js" />
-				<file name="mxJsCanvas.js" />
-			</sources>
-
-			<sources dir="${war.dir}/js/diagramly">
-				<file name="DrawioClient.js" />
-				<file name="DrawioUser.js" />
-				<file name="DriveFile.js" />
-				<file name="DriveLibrary.js" />
-				<file name="DriveClient.js" />
-				<file name="DropboxFile.js" />
-				<file name="DropboxLibrary.js" />
-				<file name="DropboxClient.js" />
-				<file name="OneDriveFile.js" />
-				<file name="OneDriveLibrary.js" />
-				<file name="OneDriveClient.js" />
-				<file name="GitHubFile.js" />
-				<file name="GitHubLibrary.js" />
-				<file name="GitHubClient.js" />
-				<file name="TrelloFile.js" />
-				<file name="TrelloLibrary.js" />
-				<file name="TrelloClient.js" />
-			</sources>
-			
-			<sources dir="${war.dir}/js/diagramly">
-				<file name="App.js" />
-				<file name="Menus.js" />
-				<file name="Pages.js" />
-				<file name="Trees.js" />
-				<file name="Minimal.js" />
-				<file name="DistanceGuides.js" />
-			</sources>
-		</jscomp>
-
 		<concat destfile="${war.dir}/js/app.min.js" fixlastline="yes" append="no">
 			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/cryptojs" files="aes.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files="app.in.min.js"/>
+			<filelist dir="${build.dir}" files="app.in.min.js"/>
 			<filelist dir="${build.dir}" files="sidebar.min.js,grapheditor.min.js,client.min.js"/>
     	</concat>
 
 		<replace file="${war.dir}/js/app.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
-
-		<delete file="${basedir}/app.in.min.js"/>
 	</target>
 
 	<target name="all">
