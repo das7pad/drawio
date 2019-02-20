@@ -4,7 +4,7 @@ webapp = $(src)/main/webapp
 styles = $(webapp)/styles
 sidebar = $(webapp)/js/diagramly/sidebar
 grapheditor = $(webapp)/js/mxgraph
-version = $(shell cat ../../VERSION)
+version = ../../VERSION
 
 GRAPHEDITOR_FILES = $(filter-out \
 	$(grapheditor)/Init.js,$(wildcard $(grapheditor)/*.js))
@@ -86,13 +86,16 @@ jscompile = java \
 	--compilation_level SIMPLE \
 	--rewrite_polyfills false
 
+# drop the version file from the prerequisites
+prerequisites = $(filter-out $(version),$^)
+
 jscompile_prerequisites = $(jscompile) \
 	--js_output_file $@ \
-	$(sort $(filter %.js,$^))
+	$(sort $(filter %.js,$(prerequisites)))
 
-concat_prerequisites = cat $(sort $^) > $@
+concat_prerequisites = cat $(sort $(prerequisites)) > $@
 
-insert_version = sed -i s/@DRAWIO-VERSION@/$(version)/g $@
+insert_version = sed -i s/@DRAWIO-VERSION@/$(shell cat $(version))/g $@
 
 
 .PHONY: all
