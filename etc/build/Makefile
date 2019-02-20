@@ -19,6 +19,7 @@ app: merge
 app: $(build)/constants.min.js
 app: $(build)/default.min.xml
 app: $(build)/dark-default.min.xml
+app: $(build)/dia.txt
 app:
 	ant app
 
@@ -30,6 +31,9 @@ $(build)/constants.min.js: constants.js
 
 $(build)/%.min.xml: $(styles)/%.xml
 	tr --delete '\n' < $< | sed "s/'/\\\\'/g;s/\t//g;" > $@
+
+$(build)/dia.txt: $(webapp)/resources/dia.txt
+	tr '\n' '\v' < $< | sed "s/\v/\\\\n/g;s/'/\\\\'/g;" > $@
 
 .PHONY: merge
 merge: $(webapp)/cache.manifest
