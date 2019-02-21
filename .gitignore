@@ -1,4 +1,5 @@
 bin
 build
+!/etc/build/
 classes
 node_modules
