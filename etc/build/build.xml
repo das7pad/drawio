@@ -41,7 +41,7 @@
       		<format property="time.stamp" pattern="MM/dd/yyyy hh:mm aa" unit="hour"/>
   		</tstamp>
 		<copy
-			file="${basedir}/cache.txt"
+			file="${basedir}/templates/cache.txt"
 			tofile="${war.dir}/cache.manifest"
 			overwrite="true"
 		>
@@ -179,7 +179,7 @@
 		</jscomp>
 
 		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/constants.min.js">
-			<sources dir="${basedir}">
+			<sources dir="${basedir}/templates">
 				<file name="constants.js"/>
 			</sources>
 		</jscomp>
@@ -223,7 +223,7 @@
 		<delete file="${basedir}/base-viewer.js"/>
 
 		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/init-viewer.min.js">
-			<sources dir="${basedir}">
+			<sources dir="${basedir}/templates">
 				<file name="init-viewer.js"/>
 			</sources>
 		</jscomp>
