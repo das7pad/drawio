@@ -54,14 +54,6 @@
 	</target>
 
 	<target name="app" depends="merge">
-		<delete file="${basedir}/constants.js"/>
-		<echo file="${basedir}/constants.js">
-			window.STENCIL_PATH = window.STENCIL_PATH || 'https://www.draw.io/stencils';
-			window.SHAPES_PATH = window.SHAPES_PATH || 'https://www.draw.io/shapes';
-			window.mxBasePath = window.mxBasePath || 'https://www.draw.io/mxgraph/';
-			window.mxLoadStylesheets = window.mxLoadStylesheets || false;
-		</echo>
-
 		<delete file="${basedir}/default.min.xml"/>
 		<copy file="${war.dir}/styles/default.xml" tofile="${basedir}/default.min.xml" overwrite="true"/>
 		<replaceregexp file="${basedir}/default.min.xml" match="${line.separator}" flags="g" replace=""/>
@@ -258,7 +250,6 @@
     		</concat>
 
 		<delete file="${war.dir}/js/extensions.min.js"/>
-		<delete file="${basedir}/constants.js"/>
 		<delete file="${basedir}/constants.min.js"/>
 		<delete file="${basedir}/init-viewer.js"/>
 		<delete file="${basedir}/init-viewer.min.js"/>
