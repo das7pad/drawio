@@ -5,12 +5,27 @@
 	<property file="build.properties" />
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="${jscompiler}" />
 
-	<target name="merge">
+	<target name="stencils.src">
+		<uptodate
+			property="stencils.changed"
+			targetfile="${war.dir}/js/stencils.min.js"
+		>
+			<srcfiles dir="${war.dir}/stencils" includes="**/*.xml" />
+		</uptodate>
+	</target>
+	<target
+		name="stencils.min.js"
+		depends="stencils.src"
+		unless="stencils.changed"
+	>
 		<java fork="false" classname="Xml2Js" classpath=".">
 			<arg value="../../src/main/webapp/stencils"/>
 			<arg value="../../src/main/webapp/js/stencils.min.js"/>
 		</java>
+	</target>
 
+	<target name="merge">
+		<antcall target="stencils.min.js" />
 		<jscomp
 			compilationLevel="simple"
 			debug="false"
