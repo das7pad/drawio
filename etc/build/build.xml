@@ -54,30 +54,39 @@
 	</target>
 
 	<target name="app" depends="merge">
-		<delete file="${basedir}/default.min.xml"/>
-		<copy file="${war.dir}/styles/default.xml" tofile="${basedir}/default.min.xml" overwrite="true"/>
-		<replaceregexp file="${basedir}/default.min.xml" match="${line.separator}" flags="g" replace=""/>
-		<replaceregexp file="${basedir}/default.min.xml" match="\t" flags="g" replace=""/>
-		<replaceregexp file="${basedir}/default.min.xml" match="'" flags="g" replace="\\\\'" byline="true"/>
-		
-		<delete file="${basedir}/Graph-Stylesheet.js"/>
-		<echo file="${basedir}/Graph-Stylesheet.js">Graph.prototype.defaultThemes[Graph.prototype.defaultThemeName] = mxUtils.parseXml('</echo>
-		<concat destfile="${basedir}/Graph-Stylesheet.js" fixlastline="no" append="true">
-			<filelist dir="${basedir}" files="default.min.xml"/>
-    		</concat>
-		<echo file="${basedir}/Graph-Stylesheet.js" append="true">').documentElement;</echo>
-
-		<delete file="${basedir}/dark-default.min.xml"/>
-		<copy file="${war.dir}/styles/dark-default.xml" tofile="${basedir}/dark-default.min.xml" overwrite="true"/>
-		<replaceregexp file="${basedir}/dark-default.min.xml" match="${line.separator}" flags="g" replace=""/>
-		<replaceregexp file="${basedir}/dark-default.min.xml" match="\t" flags="g" replace=""/>
-		<replaceregexp file="${basedir}/dark-default.min.xml" match="'" flags="g" replace="\\\\'" byline="true"/>
-
-		<echo file="${basedir}/Graph-Stylesheet.js" append="true">Graph.prototype.defaultThemes['darkTheme'] = mxUtils.parseXml('</echo>
-		<concat destfile="${basedir}/Graph-Stylesheet.js" fixlastline="no" append="true">
-			<filelist dir="${basedir}" files="dark-default.min.xml"/>
-    		</concat>
-		<echo file="${basedir}/Graph-Stylesheet.js" append="true">').documentElement;</echo>
+		<loadfile
+			property="default.escaped.xml"
+			srcfile="${war.dir}/styles/default.xml"
+		>
+			<filterchain>
+				<replacestring from="'" to="\'" />
+			</filterchain>
+		</loadfile>
+		<loadfile
+			property="dark-default.escaped.xml"
+			srcfile="${war.dir}/styles/dark-default.xml"
+		>
+			<filterchain>
+				<replacestring from="'" to="\'" />
+			</filterchain>
+		</loadfile>
+		<copy
+			file="${basedir}/templates/Graph-Stylesheet.js"
+			tofile="${basedir}/Graph-Stylesheet.js"
+			overwrite="true"
+		>
+			<filterchain>
+				<replacestring
+					from="@DEFAULT@"
+					to="${default.escaped.xml}"
+				/>
+				<replacestring
+					from="@DARK_DEFAULT@"
+					to="${dark-default.escaped.xml}"
+				/>
+				<deletecharacters chars="\n\t" />
+			</filterchain>
+		</copy>
 
 		<loadfile property="dia.min.txt" srcfile="${war.dir}/resources/dia.txt">
 			<filterchain>
@@ -241,8 +250,6 @@
 		<delete file="${war.dir}/js/extensions.min.js"/>
 		<delete file="${basedir}/constants.min.js"/>
 		<delete file="${basedir}/init-viewer.min.js"/>
-		<delete file="${basedir}/default.min.xml"/>
-		<delete file="${basedir}/dark-default.min.xml"/>
 
 		<loadfile property="version" srcFile="../../VERSION"/>
 
