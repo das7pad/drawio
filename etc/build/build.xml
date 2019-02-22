@@ -199,7 +199,12 @@
 			</sources>
 		</jscomp>
 			
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/base-viewer.js">
+		<jscomp
+			compilationLevel="simple"
+			forceRecompile="true"
+			debug="false"
+			output="${basedir}/base-viewer.min.js"
+		>
 			<sources dir="${grapheditor.dir}">
 				<file name="Editor.js" />
 				<file name="EditorUi.js" />
@@ -227,25 +232,31 @@
 				<file name="GraphViewer.js" />
 			</sources>
 		</jscomp>
-		
-		<concat destfile="${basedir}/base-viewer.min.js" fixlastline="yes" append="no">
-			<filelist dir="${basedir}" files="constants.min.js"/>
-			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
-			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
-			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files="client.min.js,base-viewer.js"/>
-    	</concat>
-		<delete file="${basedir}/base-viewer.js"/>
 
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/init-viewer.min.js">
+		<jscomp
+			compilationLevel="simple"
+			forceRecompile="true"
+			debug="false"
+			output="${basedir}/init-viewer.min.js"
+		>
 			<sources dir="${basedir}/templates">
 				<file name="init-viewer.js"/>
 			</sources>
 		</jscomp>
-		
-		<concat destfile="${war.dir}/js/viewer.min.js" fixlastline="yes" append="no">
-			<filelist dir="${basedir}" files="base-viewer.min.js,init-viewer.min.js"/>
-    		</concat>
+
+		<concat
+			destfile="${war.dir}/js/viewer.min.js"
+			fixlastline="yes"
+			append="no"
+		>
+			<filelist dir="${basedir}" files="constants.min.js"/>
+			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
+			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
+			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
+			<filelist dir="${basedir}" files="client.min.js,base-viewer.min.js"/>
+			<filelist dir="${basedir}" files="init-viewer.min.js" />
+    	</concat>
+		<delete file="${basedir}/base-viewer.min.js"/>
 
 		<delete file="${war.dir}/js/extensions.min.js"/>
 		<delete file="${basedir}/constants.min.js"/>
@@ -368,7 +379,6 @@
 			<fileset dir="${build.dir}">
 			</fileset>
 		</delete>
-		<delete file="${basedir}/base-viewer.min.js"/>
 	</target>
 	
 	<target name="war" depends="javac" description="Create the stand-alone war file">
