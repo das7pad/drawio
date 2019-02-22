@@ -5,6 +5,10 @@
 	<property file="build.properties" />
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="${jscompiler}" />
 
+	<target name="noop">
+		<!-- no op target -->
+	</target>
+
 	<target name="stencils.src">
 		<uptodate
 			property="stencils.changed"
