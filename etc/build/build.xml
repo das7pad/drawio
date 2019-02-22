@@ -79,18 +79,24 @@
     		</concat>
 		<echo file="${basedir}/Graph-Stylesheet.js" append="true">').documentElement;</echo>
 
-		
-		<delete file="${basedir}/dia.txt"/>
-		<copy file="${war.dir}/resources/dia.txt" tofile="${basedir}/dia.txt" overwrite="true"/>
-		<replaceregexp file="${basedir}/dia.txt" match="${line.separator}" flags="g" replace="\\\\n"/>
-		<replaceregexp file="${basedir}/dia.txt" match="'" flags="g" replace="\\\\'" byline="true"/>
-		
-		<delete file="${basedir}/Graph-Resources.js"/>
-		<echo file="${basedir}/Graph-Resources.js">mxResources.parse('</echo>
-		<concat destfile="${basedir}/Graph-Resources.js" fixlastline="no" append="true">
-			<filelist dir="${basedir}" files="dia.txt"/>
-    		</concat>
-		<echo file="${basedir}/Graph-Resources.js" append="true">');</echo>
+		<loadfile property="dia.min.txt" srcfile="${war.dir}/resources/dia.txt">
+			<filterchain>
+				<tokenfilter>
+					<filetokenizer/>
+					<replacestring from="${line.separator}" to="\n" />
+					<replacestring from="'" to="\'" />
+				</tokenfilter>
+			</filterchain>
+		</loadfile>
+		<copy
+			file="${basedir}/templates/Graph-Resources.js"
+			tofile="${basedir}/Graph-Resources.js"
+			overwrite="true"
+		>
+			<filterchain>
+				<replacestring from="@DIA@" to="${dia.min.txt}" />
+			</filterchain>
+		</copy>
 		
 		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/grapheditor.min.js">
 			<sources dir="${grapheditor.dir}">
@@ -237,7 +243,6 @@
 		<delete file="${basedir}/init-viewer.min.js"/>
 		<delete file="${basedir}/default.min.xml"/>
 		<delete file="${basedir}/dark-default.min.xml"/>
-		<delete file="${basedir}/dia.txt"/>
 
 		<loadfile property="version" srcFile="../../VERSION"/>
 
