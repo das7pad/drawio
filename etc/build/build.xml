@@ -222,23 +222,6 @@
     	</concat>
 		<delete file="${basedir}/base-viewer.js"/>
 
-		<echo file="${basedir}/init-viewer.js">
-			(function()
-			{
-				Editor.initMath();
-				GraphViewer.initCss();
-				
-				if (window.onDrawioViewerLoad != null)
-				{
-					window.onDrawioViewerLoad();
-				}
-				else
-				{
-					GraphViewer.processElements();
-				}
-			})();
-		</echo>
-		
 		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/init-viewer.min.js">
 			<sources dir="${basedir}">
 				<file name="init-viewer.js"/>
@@ -251,7 +234,6 @@
 
 		<delete file="${war.dir}/js/extensions.min.js"/>
 		<delete file="${basedir}/constants.min.js"/>
-		<delete file="${basedir}/init-viewer.js"/>
 		<delete file="${basedir}/init-viewer.min.js"/>
 		<delete file="${basedir}/default.min.xml"/>
 		<delete file="${basedir}/dark-default.min.xml"/>
