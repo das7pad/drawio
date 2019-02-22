@@ -88,15 +88,15 @@
 		<echo file="${basedir}/Graph-Stylesheet.js" append="true">').documentElement;</echo>
 
 		
-		<delete file="${basedir}/.tmp2.js"/>
-		<copy file="${war.dir}/resources/dia.txt" tofile="${basedir}/.tmp2.xml" overwrite="true"/>
-		<replaceregexp file="${basedir}/.tmp2.xml" match="${line.separator}" flags="g" replace="\\\\n"/>
-		<replaceregexp file="${basedir}/.tmp2.xml" match="'" flags="g" replace="\\\\'" byline="true"/>
+		<delete file="${basedir}/dia.txt"/>
+		<copy file="${war.dir}/resources/dia.txt" tofile="${basedir}/dia.txt" overwrite="true"/>
+		<replaceregexp file="${basedir}/dia.txt" match="${line.separator}" flags="g" replace="\\\\n"/>
+		<replaceregexp file="${basedir}/dia.txt" match="'" flags="g" replace="\\\\'" byline="true"/>
 		
 		<delete file="${basedir}/Graph-Resources.js"/>
 		<echo file="${basedir}/Graph-Resources.js">mxResources.parse('</echo>
 		<concat destfile="${basedir}/Graph-Resources.js" fixlastline="no" append="true">
-			<filelist dir="${basedir}" files=".tmp2.xml"/>
+			<filelist dir="${basedir}" files="dia.txt"/>
     		</concat>
 		<echo file="${basedir}/Graph-Resources.js" append="true">');</echo>
 		
@@ -263,7 +263,7 @@
 		<delete file="${basedir}/.tmp2.min.js"/>
 		<delete file="${basedir}/default.min.xml"/>
 		<delete file="${basedir}/dark-default.min.xml"/>
-		<delete file="${basedir}/.tmp2.xml"/>
+		<delete file="${basedir}/dia.txt"/>
 
 		<loadfile property="version" srcFile="../../VERSION"/>
 
