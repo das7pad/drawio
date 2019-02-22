@@ -28,8 +28,7 @@
 		</java>
 	</target>
 
-	<target name="merge">
-		<antcall target="stencils.min.js" />
+	<target name="shapes.min.js">
 		<jscomp
 			compilationLevel="simple"
 			debug="false"
@@ -40,7 +39,9 @@
 				<fileset dir="${war.dir}/shapes" includes="**/*.js" />
 			</path>
 		</jscomp>
-		
+	</target>
+
+	<target name="cache.manifest">
 		<tstamp>
       		<format property="time.stamp" pattern="MM/dd/yyyy hh:mm aa" unit="hour"/>
   		</tstamp>
@@ -55,7 +56,7 @@
 		</copy>
 	</target>
 
-	<target name="app" depends="merge">
+	<target name="Graph-Stylesheet.js">
 		<loadfile
 			property="default.escaped.xml"
 			srcfile="${war.dir}/styles/default.xml"
@@ -89,7 +90,9 @@
 				<deletecharacters chars="\n\t" />
 			</filterchain>
 		</copy>
+	</target>
 
+	<target name="Graph-Resources.js">
 		<loadfile property="dia.min.txt" srcfile="${war.dir}/resources/dia.txt">
 			<filterchain>
 				<tokenfilter>
@@ -108,7 +111,9 @@
 				<replacestring from="@DIA@" to="${dia.min.txt}" />
 			</filterchain>
 		</copy>
-		
+	</target>
+
+	<target name="grapheditor.min.js">
 		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${build.dir}/grapheditor.min.js">
 			<sources dir="${grapheditor.dir}">
 				<file name="Editor.js" />
@@ -123,7 +128,9 @@
 				<file name="Dialogs.js" />
 			</sources>
 		</jscomp>
-		
+	</target>
+
+	<target name="sidebar.min.js">
 		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${build.dir}/sidebar.min.js">
 			<sources dir="${war.dir}/js/diagramly/sidebar">
 				<file name="Sidebar.js" />
@@ -172,7 +179,9 @@
 				<file name="Sidebar-WebIcons.js" />
 			</sources>
 		</jscomp>
-		
+	</target>
+
+	<target name="client.min.js">
 		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${build.dir}/client.min.js">
 			<sources dir="${war.dir}/js/deflate">
 				<file name="base64.js" />
@@ -194,13 +203,23 @@
 				<file name="jscolor.js" />
 			</sources>
 		</jscomp>
+	</target>
 
+	<target name="constants.min.js">
 		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${build.dir}/constants.min.js">
 			<sources dir="${basedir}/templates">
 				<file name="constants.js"/>
 			</sources>
 		</jscomp>
-			
+	</target>
+
+	<target
+		name="base-viewer.min.js"
+		depends="
+			Graph-Resources.js,
+			Graph-Stylesheet.js,
+			noop"
+	>
 		<jscomp
 			compilationLevel="simple"
 			forceRecompile="true"
@@ -234,7 +253,9 @@
 				<file name="GraphViewer.js" />
 			</sources>
 		</jscomp>
+	</target>
 
+	<target name="init-viewer.min.js">
 		<jscomp
 			compilationLevel="simple"
 			forceRecompile="true"
@@ -245,7 +266,17 @@
 				<file name="init-viewer.js"/>
 			</sources>
 		</jscomp>
+	</target>
 
+	<target
+		name="viewer.min.js"
+		depends="
+			base-viewer.min.js,
+			client.min.js,
+			constants.min.js,
+			init-viewer.min.js,
+			noop"
+	>
 		<concat
 			destfile="${war.dir}/js/viewer.min.js"
 			fixlastline="yes"
@@ -258,14 +289,13 @@
 			<filelist dir="${build.dir}" files="client.min.js,base-viewer.min.js"/>
 			<filelist dir="${build.dir}" files="init-viewer.min.js" />
     	</concat>
-		<delete file="${build.dir}/base-viewer.min.js"/>
+	</target>
 
-		<delete file="${war.dir}/js/extensions.min.js"/>
-		<delete file="${build.dir}/constants.min.js"/>
-		<delete file="${build.dir}/init-viewer.min.js"/>
-
+	<target name="version">
 		<loadfile property="version" srcFile="../../VERSION"/>
+	</target>
 
+	<target name="extensions.min.js">
 		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${war.dir}/js/extensions.min.js">
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="Extensions.js" />
@@ -283,7 +313,14 @@
 		<concat destfile="${war.dir}/js/extensions.min.js" fixlastline="yes" append="yes">
 	    		<fileset dir="${war.dir}/js/jszip" includes="**/*.min.js"/>
 	    	</concat>
+	</target>
 
+	<target
+		name="app.in.min.js"
+		depends="
+			Graph-Stylesheet.js,
+			noop"
+	>
 		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${build.dir}/app.in.min.js">
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="DrawioFile.js" />
@@ -338,7 +375,18 @@
 				<file name="DistanceGuides.js" />
 			</sources>
 		</jscomp>
+	</target>
 
+	<target
+		name="app.min.js"
+		depends="
+			app.in.min.js,
+			client.min.js,
+			grapheditor.min.js,
+			sidebar.min.js,
+			version,
+			noop"
+	>
 		<concat destfile="${war.dir}/js/app.min.js" fixlastline="yes" append="no">
 			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
@@ -348,13 +396,19 @@
     	</concat>
 
 		<replace file="${war.dir}/js/app.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
+	</target>
 
-		<delete file="${build.dir}/Graph-Stylesheet.js"/>
-		<delete file="${build.dir}/Graph-Resources.js"/>
-		<delete file="${build.dir}/grapheditor.min.js"/>
-		<delete file="${build.dir}/sidebar.min.js"/>
-		<delete file="${build.dir}/client.min.js"/>
-		<delete file="${build.dir}/app.in.min.js"/>
+	<target
+		name="app"
+		depends="
+			app.min.js,
+			cache.manifest,
+			extensions.min.js,
+			shapes.min.js,
+			stencils.min.js,
+			viewer.min.js,
+			noop"
+	>
 	</target>
 
 	<target name="all" depends="app">
@@ -366,7 +420,7 @@
 		<fileset dir="${war.dir}/WEB-INF/lib" />
 	</path>
 
-	<target name="javac" depends="app" description="Java compilation">
+	<target name="javac" description="Java compilation">
 		<mkdir dir="${javac.dir}"/>
 		<javac includeantruntime="false" srcdir="${src.dir}" excludes="**/EmbedServlet2.java" destdir="${javac.dir}">
 			<classpath refid="javac.class.path" />
@@ -382,8 +436,15 @@
 			</fileset>
 		</delete>
 	</target>
-	
-	<target name="war" depends="javac" description="Create the stand-alone war file">
+
+	<target
+		name="war"
+		depends="
+			app,
+			javac,
+			noop"
+		description="Create the stand-alone war file"
+	>
 		<zip destfile="${build.dir}/${war.name}" basedir="${war.dir}" >
 		</zip>
 	</target>
