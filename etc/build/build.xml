@@ -43,8 +43,8 @@
 
 	<target name="cache.manifest">
 		<tstamp>
-      		<format property="time.stamp" pattern="MM/dd/yyyy hh:mm aa" unit="hour"/>
-  		</tstamp>
+			<format property="time.stamp" pattern="MM/dd/yyyy hh:mm aa" unit="hour"/>
+		</tstamp>
 		<copy
 			file="${basedir}/templates/cache.txt"
 			tofile="${war.dir}/cache.manifest"
@@ -288,7 +288,7 @@
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
 			<filelist dir="${build.dir}" files="client.min.js,base-viewer.min.js"/>
 			<filelist dir="${build.dir}" files="init-viewer.min.js" />
-    	</concat>
+		</concat>
 	</target>
 
 	<target name="version">
@@ -311,8 +311,8 @@
 			</sources>
 		</jscomp>
 		<concat destfile="${war.dir}/js/extensions.min.js" fixlastline="yes" append="yes">
-	    		<fileset dir="${war.dir}/js/jszip" includes="**/*.min.js"/>
-	    	</concat>
+			<fileset dir="${war.dir}/js/jszip" includes="**/*.min.js"/>
+		</concat>
 	</target>
 
 	<target
@@ -393,7 +393,7 @@
 			<filelist dir="${war.dir}/js/cryptojs" files="aes.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
 			<filelist dir="${build.dir}" files="client.min.js,grapheditor.min.js,sidebar.min.js,app.in.min.js"/>
-    	</concat>
+		</concat>
 
 		<replace file="${war.dir}/js/app.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
 	</target>
