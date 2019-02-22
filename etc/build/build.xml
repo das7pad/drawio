@@ -192,7 +192,7 @@
 			</sources>
 		</jscomp>
 			
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/.tmp1.js">
+		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/base-viewer.js">
 			<sources dir="${grapheditor.dir}">
 				<file name="Editor.js" />
 				<file name="EditorUi.js" />
@@ -226,8 +226,9 @@
 			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files="client.min.js,.tmp1.js"/>
+			<filelist dir="${basedir}" files="client.min.js,base-viewer.js"/>
     	</concat>
+		<delete file="${basedir}/base-viewer.js"/>
 
 		<echo file="${basedir}/init-viewer.js">
 			(function()
@@ -284,10 +285,8 @@
 		<concat destfile="${war.dir}/js/extensions.min.js" fixlastline="yes" append="yes">
 	    		<fileset dir="${war.dir}/js/jszip" includes="**/*.min.js"/>
 	    	</concat>
-		
-		<delete file="${basedir}/.tmp1.js"/>
-		
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/.tmp1.js">
+
+		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/app.in.min.js">
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="DrawioFile.js" />
 				<file name="LocalFile.js" />
@@ -347,7 +346,7 @@
 			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
 			<filelist dir="${war.dir}/js/cryptojs" files="aes.min.js"/>
 			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
-			<filelist dir="${basedir}" files="client.min.js,grapheditor.min.js,sidebar.min.js,.tmp1.js"/>
+			<filelist dir="${basedir}" files="client.min.js,grapheditor.min.js,sidebar.min.js,app.in.min.js"/>
     	</concat>
 
 		<replace file="${war.dir}/js/app.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
@@ -357,7 +356,7 @@
 		<delete file="${basedir}/grapheditor.min.js"/>
 		<delete file="${basedir}/sidebar.min.js"/>
 		<delete file="${basedir}/client.min.js"/>
-		<delete file="${basedir}/.tmp1.js"/>
+		<delete file="${basedir}/app.in.min.js"/>
 	</target>
 
 	<target name="all" depends="app">
