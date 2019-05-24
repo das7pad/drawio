@@ -268,6 +268,22 @@
 		</jscomp>
 	</target>
 
+	<resources id="viewer.src">
+		<filelist dir="${build.dir}" files="constants.min.js"/>
+		<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
+		<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
+		<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
+		<filelist dir="${build.dir}" files="client.min.js,base-viewer.min.js"/>
+		<filelist dir="${build.dir}" files="init-viewer.min.js" />
+	</resources>
+	<target name="viewer.src">
+		<uptodate
+			property="viewer.uptodate"
+			targetfile="${war.dir}/js/viewer.min.js"
+		>
+			<srcresources refid="viewer.src"/>
+		</uptodate>
+	</target>
 	<target
 		name="viewer.min.js"
 		depends="
@@ -275,7 +291,9 @@
 			client.min.js,
 			constants.min.js,
 			init-viewer.min.js,
+			viewer.src,
 			noop"
+		unless="viewer.uptodate"
 	>
 		<concat
 			destfile="${war.dir}/js/viewer.min.js"
