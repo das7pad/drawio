@@ -114,7 +114,7 @@
 	</target>
 
 	<target name="grapheditor.min.js">
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${build.dir}/grapheditor.min.js">
+		<jscomp compilationLevel="simple" debug="false" output="${build.dir}/grapheditor.min.js">
 			<sources dir="${grapheditor.dir}">
 				<file name="Editor.js" />
 				<file name="EditorUi.js" />
@@ -131,7 +131,7 @@
 	</target>
 
 	<target name="sidebar.min.js">
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${build.dir}/sidebar.min.js">
+		<jscomp compilationLevel="simple" debug="false" output="${build.dir}/sidebar.min.js">
 			<sources dir="${war.dir}/js/diagramly/sidebar">
 				<file name="Sidebar.js" />
 				<file name="Sidebar-Advanced.js" />
@@ -182,7 +182,7 @@
 	</target>
 
 	<target name="client.min.js">
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${build.dir}/client.min.js">
+		<jscomp compilationLevel="simple" debug="false" output="${build.dir}/client.min.js">
 			<sources dir="${war.dir}/js/deflate">
 				<file name="base64.js" />
 			</sources>
@@ -206,7 +206,7 @@
 	</target>
 
 	<target name="constants.min.js">
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${build.dir}/constants.min.js">
+		<jscomp compilationLevel="simple" debug="false" output="${build.dir}/constants.min.js">
 			<sources dir="${basedir}/templates">
 				<file name="constants.js"/>
 			</sources>
@@ -296,7 +296,7 @@
 	</target>
 
 	<target name="extensions.min.js">
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${war.dir}/js/extensions.min.js">
+		<jscomp compilationLevel="simple" debug="false" output="${war.dir}/js/extensions.min.js">
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="Extensions.js" />
 			</sources>
@@ -321,7 +321,7 @@
 			Graph-Stylesheet.js,
 			noop"
 	>
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${build.dir}/app.in.min.js">
+		<jscomp compilationLevel="simple" debug="false" output="${build.dir}/app.in.min.js">
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="DrawioFile.js" />
 				<file name="LocalFile.js" />
